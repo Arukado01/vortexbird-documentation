@@ -1,0 +1,17 @@
+sequenceDiagram
+  participant C as Canal
+  participant A as API y handler
+  participant D as DB y adaptadores locales
+  participant W as Worker
+  C->>A: Crear orden con token y clave
+  A->>A: Validar permiso y partner/canal
+  A->>D: Lock de idempotencia
+  A->>D: CRM, precio ERP y reserva WMS simulados
+  A->>D: Commit orden, reserva y outbox
+  A-->>C: 202 reserved y recibo
+  W->>D: Reclamar evento con lease
+  W->>W: IPaymentGateway simulado fuera de transacción
+  W->>D: Confirmar o compensar y eventos
+  C->>A: Consultar orden
+  A->>D: Leer estado e historial
+  A-->>C: Estado actualizado

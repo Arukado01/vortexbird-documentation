@@ -1,0 +1,14 @@
+sequenceDiagram
+  participant B as Navegador
+  participant K as Keycloak
+  participant A as API
+  participant D as Permisos DB
+  B->>K: Authorization Code y PKCE
+  K-->>B: Código de autorización
+  B->>K: Código y verifier
+  K-->>B: Access token breve
+  B->>A: Bearer token
+  A->>A: Validar firma, issuer, audience y tiempo
+  A->>D: Permisos, partner y canal
+  D-->>A: Autorización contextual
+  A-->>B: Respuesta o 401/403

@@ -1,0 +1,11 @@
+flowchart TD
+  channels["E-commerce y marketplaces"] --> api["API .NET: contratos y permisos"]
+  portal["Portal React"] --> api
+  identity["Keycloak: identidad"] --> portal
+  identity --> api
+  api --> core["Casos de uso y saga"]
+  core --> db["PostgreSQL: estado y outbox"]
+  core --> adapters["Puertos y adaptadores simulados"]
+  api --> cache["Redis: consultas"]
+  db --> worker["Worker: reintentos y eventos"]
+  worker --> adapters

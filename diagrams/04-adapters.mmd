@@ -1,0 +1,7 @@
+flowchart TD
+  app["Modelo canónico de AndesRetail"] --> acl["Puertos y capa anticorrupción"]
+  acl --> erp["ERP: catálogo y precios"]
+  acl --> wms["WMS: stock y reserva"]
+  acl --> oms["OMS: orden y despacho"]
+  acl --> crm["CRM: cliente y compra"]
+  note["Implementación de demo: sistemas simulados"] -.-> acl

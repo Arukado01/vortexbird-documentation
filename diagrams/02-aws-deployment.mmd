@@ -1,0 +1,10 @@
+flowchart TD
+  edge["Objetivo AWS: DNS y TLS propios"] --> waf["WAF y ALB"]
+  waf --> kong["Kong: subredes de aplicación"]
+  kong --> pods["EKS: frontend, API y workers"]
+  pods --> rds["RDS PostgreSQL privado"]
+  pods --> redis["ElastiCache privado"]
+  pods --> sqs["SQS y DLQ"]
+  pods --> secrets["Secrets Manager e IAM"]
+  pods --> metrics["CloudWatch y trazas"]
+  note["IaC preparada: no desplegado"] -.-> pods

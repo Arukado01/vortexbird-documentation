@@ -1,0 +1,14 @@
+stateDiagram-v2
+  [*] --> pending
+  pending --> reserved: reserva atómica
+  pending --> failed: fallo de negocio
+  reserved --> awaiting_payment: worker
+  reserved --> compensating: cancelar o expirar
+  awaiting_payment --> confirmed: approved
+  awaiting_payment --> compensating: rejected o cancelar
+  compensating --> cancelled: reserva liberada
+  compensating --> failed: transición de fallo
+  confirmed --> shipped: fulfillment simulado
+  shipped --> delivered: entrega confirmada
+  cancelled --> [*]
+  delivered --> [*]

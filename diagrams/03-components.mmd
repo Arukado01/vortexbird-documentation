@@ -1,0 +1,9 @@
+flowchart TD
+  api["API: endpoints y autenticación"] --> app["Application: comandos y consultas"]
+  app --> domain["Domain: entidades e invariantes"]
+  infra["Infrastructure: EF y adaptadores"] --> app
+  infra --> domain
+  api --> infra
+  app --> ports["Puertos: persistencia, pago e inventario"]
+  infra -.-> ports
+  note["Dependencias de código hacia el dominio"] -.-> domain

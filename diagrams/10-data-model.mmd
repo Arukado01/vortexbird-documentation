@@ -1,0 +1,14 @@
+erDiagram
+  PARTNER ||--o{ CHANNEL : autoriza
+  PARTNER ||--o{ ORDER : posee
+  ORDER ||--|{ ORDER_ITEM : contiene
+  ORDER ||--o{ PAYMENT : referencia
+  ORDER ||--o{ RESERVATION : requiere
+  PRODUCT ||--o{ ORDER_ITEM : identifica
+  PRODUCT ||--o{ INVENTORY : disponibilidad
+  ORDER ||--o{ OUTBOX_MESSAGE : origina
+  PARTNER ||--o{ IDEMPOTENCY_RECORD : aisla
+  USER ||--o{ USER_ROLE : recibe
+  ROLE ||--o{ USER_ROLE : asigna
+  ROLE ||--o{ ROLE_PERMISSION : permite
+  PERMISSION ||--o{ ROLE_PERMISSION : autoriza

@@ -1,0 +1,10 @@
+flowchart TD
+  tx["Commit: orden y outbox"] --> publish["Publicador con lease"]
+  publish --> transport["Transporte local; SQS objetivo"]
+  transport --> inbox["Consumidor: inbox y efecto local"]
+  inbox --> ack["Commit y acuse"]
+  inbox --> retry["Fallo transitorio: backoff"]
+  retry --> transport
+  retry --> dlq["Máximo de intentos: DLQ"]
+  dlq --> repair["Corrección y redrive gradual"]
+  repair --> transport

@@ -1,0 +1,18 @@
+sequenceDiagram
+  participant W as Outbox worker
+  participant G as IPaymentGateway simulado
+  participant S as OrderSaga
+  participant D as PostgreSQL
+  W->>G: Iniciar pago por referencia estable
+  G-->>W: approved, rejected o pending
+  W->>S: Aplicar resultado
+  S->>D: Lock por orden e intención simulada
+  alt approved
+    S->>D: Consumir reserva y confirmar
+  else rejected
+    S->>D: Liberar reserva y cancelar
+  else pending
+    S->>D: Conservar awaiting_payment
+  end
+  S->>D: Persistir eventos y transacción
+  Note over W,D: Simulador local; sin pago real ni sandbox externo conectado

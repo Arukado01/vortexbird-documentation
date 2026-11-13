@@ -1,0 +1,22 @@
+name: documentation
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install reportlab Pillow pypdf
+      - run: python scripts/validate_docs.py
+      - run: python scripts/build_pdf.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: architecture-assessment
+          path: output/pdf/*.pdf
