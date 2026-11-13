@@ -10,7 +10,7 @@ sequenceDiagram
   A->>D: Commit orden, reserva y outbox
   A-->>C: 202 reserved y recibo
   W->>D: Reclamar evento con lease
-  W->>W: IPaymentGateway simulado fuera de transacción
+  W->>W: IPaymentGateway elegido fuera de transacción
   W->>D: Confirmar o compensar y eventos
   C->>A: Consultar orden
   A->>D: Leer estado e historial

@@ -74,7 +74,7 @@ while i<len(lines):
         while i<len(lines) and not lines[i].startswith('```'):
             for chunk in textwrap.wrap(lines[i],width=91,replace_whitespace=False,drop_whitespace=False) or ['']:code.append(chunk)
             i+=1
-        story.append(Preformatted('\n'.join(code),styles['CodeVB']));i+=1;continue
+        story.append(KeepTogether([Preformatted('\n'.join(code),styles['CodeVB'])]));i+=1;continue
     if line.startswith('|'):
         rows=[]
         while i<len(lines) and lines[i].strip().startswith('|'):

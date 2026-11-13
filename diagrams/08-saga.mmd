@@ -9,6 +9,7 @@ stateDiagram-v2
   compensating --> cancelled: reserva liberada
   compensating --> failed: transición de fallo
   confirmed --> shipped: fulfillment simulado
+  confirmed --> compensating: reembolso antes de despacho
   shipped --> delivered: entrega confirmada
   cancelled --> [*]
   delivered --> [*]

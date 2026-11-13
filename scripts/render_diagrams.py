@@ -99,17 +99,17 @@ def sequence(filename,title,participants,steps,note):
         d.text((45,height-95+j*25),line,font=font(19),fill="#687E8D")
     im.save(OUT/filename)
 
-diagram("01-architecture.png","01 / Arquitectura general","Demostración local; sistemas externos simulados",[
+diagram("01-architecture.png","01 / Arquitectura general","Simuladores locales; sandbox opcional sin sesión externa verificada",[
  ("portal","Portal React",100,190),("channels","E-commerce / marketplaces",580,190),("identity","Keycloak / OIDC",1060,380),
- ("api","API .NET: contratos y permisos",580,380),("cache","Redis: consultas",100,380),
- ("core","Application / Domain / saga",580,570),("db","PostgreSQL: estado y outbox",100,760),
- ("adapters","Adaptadores simulados",1060,570),("worker","Workers: eventos y reintentos",580,760)],
- [("portal","api"),("channels","api"),("identity","api"),("identity","portal"),("api","cache"),("api","core"),("core","db"),("core","adapters"),("db","worker"),("worker","adapters")],1000)
+ ("api","API: contratos, permisos, cuotas",580,380),("cache","Redis: consultas",100,380),
+ ("core","Application / Domain / saga",580,570),("db","PostgreSQL: estado, outbox, cuotas",100,760),
+ ("adapters","Adaptadores simulados",1060,570),("worker","Workers: eventos y reintentos",580,760),("payments","Checkout sandbox opcional",1060,760)],
+ [("portal","api"),("channels","api"),("identity","api"),("identity","portal"),("api","cache"),("api","core"),("core","db"),("core","adapters"),("db","worker"),("worker","adapters"),("worker","payments")],1000)
 
-diagram("02-aws-deployment.png","02 / Despliegue AWS objetivo","Infraestructura declarativa preparada; no desplegada",[
+diagram("02-aws-deployment.png","02 / Despliegue AWS objetivo","Backend: Pod Identity; Keycloak/CNI: IRSA. Infraestructura no desplegada",[
  ("edge","DNS y TLS propios",580,180),("waf","WAF / ALB",580,360),("kong","Kong en EKS",580,540),
  ("pods","API / frontend / workers",580,720),("db","RDS privado",100,910),("redis","ElastiCache privado",580,910),("sqs","SQS / DLQ",1060,910),
- ("secret","Secrets Manager / IAM",100,720),("obs","CloudWatch / trazas",1060,720)],
+ ("secret","Secrets / Pod Identity backend",100,720),("obs","CloudWatch / trazas",1060,720)],
  [("edge","waf"),("waf","kong"),("kong","pods"),("pods","db"),("pods","redis"),("pods","sqs"),("pods","secret"),("pods","obs")],1150)
 
 diagram("03-components.png","03 / Dependencias de componentes","Las flechas representan dependencias de código",[
@@ -125,11 +125,13 @@ diagram("04-adapters.png","04 / Integración y capa anticorrupción","Sistemas e
 sequence("05-create-order.png","05 / Crear una orden",["Canal","API / handler","DB / adapters locales","Worker"],[
  (0,1,"Token, clave y contenido"),(1,2,"Lock de idempotencia"),(1,2,"CRM / precio ERP / reserva WMS"),(1,2,"Commit orden y outbox"),
  (1,0,"202 reserved y recibo"),(3,2,"Reclamar evento con lease"),(3,2,"Saga de pago simulado"),(3,2,"Confirmar o compensar"),(0,1,"Consultar orden"),(1,2,"Leer estado e historial"),(1,0,"Estado actualizado")],
- "Pago por IPaymentGateway simulado fuera de transacción. No hay conexiones empresariales reales.")
+ "IPaymentGateway fuera de transacción: simulador por defecto, sandbox opcional. No hay ERP/WMS/OMS/CRM reales conectados.")
 
-sequence("06-payments.png","06 / Pago simulado",["Outbox worker","Payment gateway","OrderSaga","PostgreSQL"],[
- (0,1,"Iniciar por referencia estable"),(1,0,"approved / rejected / pending"),(0,2,"Aplicar resultado"),(2,3,"Lock e intención simulada"),(2,3,"approved: consumir y confirmar"),(2,3,"rejected: liberar y cancelar"),(2,3,"pending: awaiting_payment"),(2,3,"Eventos y commit")],
- "Ramas alternativas del simulador. No se procesa pago real ni se acredita un sandbox externo conectado.")
+sequence("06-payments.png","06 / Checkout sandbox y conciliación",["Workers","Mercado Pago sandbox","API","PostgreSQL","Portal"],[
+ (0,3,"Intención durable antes del POST"),(0,1,"Verificar test_user y crear preferencia"),(1,0,"URL o respuesta incierta"),(0,3,"Persistir pending / unknown"),
+ (4,2,"Consultar checkout autorizado"),(2,3,"Leer intención vigente"),(2,4,"URL válida, sin confirmar pago"),(1,2,"Webhook firmado"),(2,3,"Inbox canónica y durable"),(2,1,"200 después del commit"),
+ (0,1,"GET del pago autoritativo"),(1,0,"Estado y correlación verificables"),(0,3,"Lock, transición y outbox"),(0,1,"Si corresponde: reembolso estable"),(0,1,"GET de confirmación refunded"),(0,3,"Compensación o revisión pendiente")],
+ "Flujo implementado, no ejecutado contra cuenta externa. URL/retorno del navegador no confirman pagos; Simulator sigue por defecto.")
 
 sequence("07-oidc.png","07 / OIDC y autorización contextual",["Navegador","Keycloak","API","Permisos DB"],[
  (0,1,"Authorization Code + PKCE"),(1,0,"Código de autorización"),(0,1,"Código + verifier"),(1,0,"Access token breve"),
@@ -141,17 +143,18 @@ diagram("08-saga.png","08 / Saga y compensaciones","Estados del incremento local
  ("failed","failed",100,420),("comp","compensating",580,420),("confirmed","confirmed",1060,420),
  ("cancelled","cancelled",580,680),("shipped","shipped",1060,680),("delivered","delivered",1060,870)],
  [("pending","reserved"),("pending","failed"),("reserved","awaiting"),("reserved","comp"),("awaiting","comp"),("awaiting","confirmed"),
- ("comp","cancelled"),("comp","failed"),("confirmed","shipped"),("shipped","delivered")],1100)
+ ("comp","cancelled"),("comp","failed"),("confirmed","comp"),("confirmed","shipped"),("shipped","delivered")],1100)
 
-diagram("09-events.png","09 / Outbox, consumo y excepciones","Entrega al menos una vez; efectos idempotentes",[
- ("tx","Commit: orden + outbox",100,190),("pub","Publicador con lease",580,190),("queue","Local; SQS objetivo",1060,190),
- ("ack","Commit y acuse",100,420),("inbox","Inbox y efecto local",580,420),("retry","Backoff / reintento",1060,420),
- ("dlq","DLQ",1060,680),("fix","Corrección y redrive",580,680)],
- [("tx","pub"),("pub","queue"),("queue","inbox"),("inbox","ack"),("inbox","retry"),("retry","queue"),("retry","dlq"),("dlq","fix"),("fix","queue")],920)
+diagram("09-events.png","09 / Outbox, consumo y excepciones","Local o SQS opcional implementados; sin ejecución AWS/ElasticMQ verificada",[
+ ("tx","Commit: orden + outbox",100,190),("pub","Publicador con lease",580,190),("queue","Local o SQS opcional",1060,190),
+ ("complete","Finalización durable",100,420),("handler","Handler idempotente",580,420),("inbox","Inbox: origen, hash, lease",1060,420),
+ ("ack","Acuse / DeleteMessage",100,680),("retry","Backoff / visibilidad",580,680),("dlq","DLQ / estado de excepción",1060,680),
+ ("fix","Corrección y redrive",1060,900)],
+ [("tx","pub"),("pub","queue"),("queue","inbox"),("inbox","handler"),("handler","complete"),("complete","ack"),("handler","retry"),("retry","queue"),("retry","dlq"),("dlq","fix"),("fix","queue")],1140)
 
 diagram("10-data-model.png","10 / Modelo relacional lógico","Relaciones principales; DDL y migraciones son la autoridad física",[
- ("partner","Partner / Channel",100,190),("order","Order / OrderItem",580,190),("product","Product / Inventory",1060,190),
- ("idem","IdempotencyRecord",100,420),("payment","Payment / Reservation",580,420),("outbox","OutboxMessage",1060,420),
+ ("partner","Partner / Channel / QuotaCounter",100,190),("order","Order / OrderItem",580,190),("product","Product / Inventory",1060,190),
+ ("idem","IdempotencyRecord",100,420),("payment","Payment / Checkout / Receipt / Reservation",580,420),("outbox","Outbox / MessagingInbox / PaymentInbox",1060,420),
  ("user","User / UserRole",100,680),("role","Role / RolePermission",580,680),("perm","Permission",1060,680)],
  [("partner","order"),("partner","idem"),("order","product"),("order","payment"),("order","outbox"),("user","role"),("role","perm")],920)
 print(f"Rendered {len(list(OUT.glob('*.png')))} diagrams")

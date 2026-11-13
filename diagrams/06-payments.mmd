@@ -1,18 +1,25 @@
 sequenceDiagram
-  participant W as Outbox worker
-  participant G as IPaymentGateway simulado
-  participant S as OrderSaga
+  participant W as Workers
+  participant M as Mercado Pago sandbox
+  participant A as API
   participant D as PostgreSQL
-  W->>G: Iniciar pago por referencia estable
-  G-->>W: approved, rejected o pending
-  W->>S: Aplicar resultado
-  S->>D: Lock por orden e intención simulada
-  alt approved
-    S->>D: Consumir reserva y confirmar
-  else rejected
-    S->>D: Liberar reserva y cancelar
-  else pending
-    S->>D: Conservar awaiting_payment
+  participant P as Portal
+  W->>D: Intención durable antes del POST
+  W->>M: Verificar test_user y crear preferencia
+  M-->>W: URL de checkout o respuesta incierta
+  W->>D: Persistir pending o unknown
+  P->>A: Consultar checkout autorizado
+  A->>D: Leer intención vigente
+  A-->>P: URL permitida, sin confirmar pago
+  M->>A: Webhook firmado
+  A->>D: Inbox canónica y durable
+  A-->>M: HTTP 200 después del commit
+  W->>M: GET del pago autoritativo
+  M-->>W: Estado y correlación verificables
+  W->>D: Lock, transición y outbox
+  alt aprobación tardía o duplicada
+    W->>M: Reembolso con clave estable
+    W->>M: GET para confirmar refunded
+    W->>D: Compensación o revisión pendiente
   end
-  S->>D: Persistir eventos y transacción
-  Note over W,D: Simulador local; sin pago real ni sandbox externo conectado
+  Note over W,P: Flujo implementado; sin sesión externa ni saga DB end-to-end verificada

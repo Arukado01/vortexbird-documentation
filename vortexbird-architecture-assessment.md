@@ -22,7 +22,7 @@ Proponemos una capa de interoperabilidad con contratos de negocio estables, adap
 - Medir los flujos con correlation-id, trazas, métricas y auditoría, acompañados de alertas accionables y procedimientos de recuperación.
 - Evolucionar hacia AWS con infraestructura declarativa y perfiles de demostración y producción, previa revisión de costos y aprobación explícita.
 
-El beneficio de negocio es reducir duplicados y ventas inconsistentes, incorporar canales con menor cambio en los sistemas centrales y acortar la detección y recuperación de incidentes. La plataforma no elimina la consistencia eventual: la vuelve explícita, medible y reconciliable. El assessment de dos días demuestra decisiones y un recorrido funcional; la operación productiva requiere el roadmap de 4-6 semanas, 3 meses y 6 meses descrito más adelante.
+El beneficio de negocio es reducir duplicados y ventas inconsistentes, incorporar canales con menor cambio en los sistemas centrales y acortar la detección y recuperación de incidentes. La plataforma no elimina la consistencia eventual: la vuelve explícita, medible y reconciliable. El incremento incluye simuladores y código de checkout sandbox opcional, con evidencia de pruebas aisladas. La sesión externa de pagos, la ejecución integrada sobre PostgreSQL y los SLO aún requieren verificación. La operación productiva requiere el roadmap de 4-6 semanas, 3 meses y 6 meses descrito más adelante.
 
 ## 2. Preguntas, supuestos y riesgos
 
@@ -97,7 +97,7 @@ El beneficio de negocio es reducir duplicados y ventas inconsistentes, incorpora
 2. **CQRS sin event sourcing.** Comandos validan invariantes; consultas agregan y paginan en PostgreSQL. El estado actual y el historial son persistentes; el log de eventos no se presenta como fuente única reconstruible. Event sourcing añadiría complejidad no justificada por este caso.
 3. **Saga orquestada.** El estado del flujo se concentra en órdenes, con pasos y compensaciones visibles. Facilita explicar qué quedó reservado o pendiente. Frente a coreografía, sacrifica autonomía para ganar trazabilidad y control en un dominio pequeño.
 4. **Outbox y entrega al menos una vez.** Un commit local guarda cambio y evento. El publicador puede enviar y fallar antes de marcar: habrá duplicados. Inbox/deduplicación y operaciones idempotentes son obligatorios; no se promete exactly-once end-to-end.
-5. **SQS como transporte objetivo AWS.** Encaja con operación administrada y DLQ. La persistencia local del outbox permite demostrar el flujo sin fingir una conexión SQS existente. Fan-out futuro requiere SNS/EventBridge o varias colas, no consumidores competidores que reciban todos el mismo evento.
+5. **Transporte local y SQS opcional.** El outbox usa por defecto consumo local durable. La variante SQS tiene publicador, consumidor e inbox persistente; el marshalling JSON propio se apoya en el pipeline oficial `AWSSDK.Core` para credenciales, SigV4, HTTP y retry. No se presenta como instalado el paquete generado `AWSSDK.SQS`. La ejecución AWS/ElasticMQ permanece pendiente. El contrato actual acepta eventos del propio outbox verificados por hash y partner, no un bus abierto a productores externos. Fan-out futuro requiere SNS/EventBridge o varias colas, no consumidores competidores que reciban todos el mismo evento.
 6. **EKS como objetivo evaluado.** Aporta estándares Kubernetes y portabilidad, pero suma control plane, nodos, ingress y operación. Para una demo, Compose local y un perfil cloud reducido ofrecen menor costo; producción demanda HA, restauración probada y monitoreo.
 
 ### Sync versus async
@@ -133,7 +133,7 @@ El gateway valida tamaño, frecuencia y el token como defensa de borde. La API r
 | Events/Webhooks | Outbox, inbox, entrega, reintentos y DLQ | Sobre de evento versionado y firmado al entregar. |
 | Audit & Observability | Evidencia de acciones y contexto | Consulta autorizada; sin escritura administrativa destructiva. |
 
-La implementación incorpora `ErpPricingAdapter` para normalizar precios, `WmsInventoryAdapter` para consultar/reservar/liberar stock local de forma atómica, `CrmCustomerAdapter` para validar referencias de cliente y `OmsOrderAdapter` para normalizar y registrar propagación de órdenes confirmadas. Son adaptadores simulados respaldados por PostgreSQL. E-commerce y marketplaces consumen las APIs, sin acceso a tablas. `SimulatedPaymentGateway` implementa `IPaymentGateway` y se invoca fuera de la transacción de saga. Cada guard de adaptador limita concurrencia y permite fallos inducidos. Una prueba simulada no demuestra conectividad empresarial real.
+La implementación incorpora `ErpPricingAdapter` para normalizar precios, `WmsInventoryAdapter` para consultar/reservar/liberar stock local de forma atómica, `CrmCustomerAdapter` para validar referencias de cliente y `OmsOrderAdapter` para normalizar y registrar propagación de órdenes confirmadas. Son adaptadores simulados respaldados por PostgreSQL. E-commerce y marketplaces consumen las APIs, sin acceso a tablas. `IPaymentGateway` tiene un simulador predeterminado y `MercadoPagoSandboxGateway` opcional; ambos separan la llamada de proveedor de la transacción de asentamiento. Cada guard de adaptador limita concurrencia y permite fallos inducidos. Una prueba simulada no demuestra conectividad empresarial real.
 
 ### Contratos de ejemplo
 
@@ -194,7 +194,7 @@ Content-Type: application/json
 }
 ```
 
-Se responde `202 Accepted` con `Location: /api/v1/orders/{id}` después de persistir orden, reserva y outbox. El worker procesa después el resultado simulado; consultar la orden informa la evolución. El servidor calcula precio e importe. `partnerId` es obligatorio en el cuerpo y se contrasta con el contexto autenticado; enviarlo no concede acceso. `paymentOutcome` controla exclusivamente la demostración: approved, rejected, pending o unavailable según validación. No es una instrucción para una pasarela real. Repetir la clave válida devuelve el recibo original y `replayed: true`.
+Se responde `202 Accepted` con `Location: /api/v1/orders/{id}` después de persistir orden, reserva y outbox. El worker inicia el proveedor configurado; consultar la orden informa la evolución. El ejemplo utiliza el simulador predeterminado. El servidor calcula precio e importe. `partnerId` es obligatorio en el cuerpo y se contrasta con el contexto autenticado; enviarlo no concede acceso. `paymentOutcome` controla exclusivamente la demostración y se ignora por el gateway externo: no permite aprobar un pago real. Repetir la clave válida devuelve el recibo original y `replayed: true`.
 
 ### Error consistente
 
@@ -226,9 +226,26 @@ La reserva implementada aplica una actualización condicional `OnHand - Reserved
 
 ![Saga de orden: estados y compensaciones](diagrams/rendered/08-saga.png)
 
-El flujo implementado usa `pending -> reserved -> awaiting_payment -> confirmed` o `compensating -> cancelled`; admite `shipped -> delivered` después de confirmar. El worker reintenta disponibilidad simulada, deduplica mensajes y cancela reservas vencidas. Los estados `PaymentUnknown`, reembolso y compensación externa pendiente pertenecen al diseño objetivo: no están implementados como integración real. En producción un timeout debe quedar incierto, no rechazado; una aprobación posterior al vencimiento exige reconciliación y, si no se logra reservar, anulación/reembolso supervisado.
+El flujo de orden usa `pending -> reserved -> awaiting_payment -> confirmed` o `compensating -> cancelled`; admite `shipped -> delivered` después de confirmar. El worker deduplica mensajes y cancela reservas vencidas. El checkout externo tiene su propio estado: `creating`, `pending`, `unknown`, `approved`, `cancelled`, `refund_pending`, `refunded` o `manual_review`. Una respuesta incierta queda `unknown`; no se convierte en rechazo ni en una segunda creación automática. Estos caminos tienen código y pruebas de reglas/transporte controlado; la ejecución completa contra PostgreSQL y Mercado Pago sigue pendiente.
 
-Se usa versión de agregado para evitar que un webhook antiguo haga retroceder una orden entregada. Un reconciliador revisa sagas estancadas, reservas vencidas y referencias pendientes. El outbox se despacha con leases o locks de filas y `SKIP LOCKED`; al publicar y fallar antes de confirmar pueden aparecer duplicados. El consumidor persiste `(consumer, eventId)` junto con el efecto local; la deduplicación de mensajes y la idempotencia del efecto externo son controles diferentes.
+Las transiciones válidas y los bloqueos por orden evitan que una notificación antigua haga retroceder una aprobación o reembolso. El reconciliador revisa checkouts pendientes, inciertos y reembolsos. El outbox se despacha con leases o locks de filas y `SKIP LOCKED`; al publicar y fallar antes de confirmar pueden aparecer duplicados. La deduplicación de mensajes y la idempotencia del efecto externo son controles diferentes y requieren pruebas de recuperación sobre varias sesiones.
+
+### Checkout sandbox, inbox y conciliación
+
+El flujo opcional crea `PaymentCheckout` y `Payment` antes del POST a Mercado Pago, guardando la referencia `partnerId:orderId`, importe, moneda, vencimiento y lease. El cliente verifica la cuenta configurada y su condición `test_user` antes de crear una preferencia; el prefijo de una credencial no acredita que sea de pruebas. Un timeout deja intención durable `unknown`. La recuperación busca por referencia y verifica vendedor, importe, moneda y vencimiento: ausencia o ambigüedad no autorizan repetir el POST.
+
+| Endpoint implementado | Contrato y control |
+| --- | --- |
+| `GET /api/v1/payments/orders/{orderId}/checkout` | `payments.read` y partner/canal; devuelve orderId, provider, status, checkoutUrl, expiresAt, paymentStatus y canRetry. |
+| `POST /api/v1/payments/orders/{orderId}/reconcile` | `payments.manage` y partner/canal; agenda conciliación durable y responde 202, sin declarar pago aprobado. |
+| `POST /api/v1/payments/mercadopago/webhook?data.id={paymentId}` | Sin JWT, con HMAC y timestamp; máximo 32 KiB; confirma recepción después de persistir inbox o encontrar duplicado durable. |
+| `GET /api/v1/payments/inbox` y `POST /api/v1/payments/inbox/{id}/retry` | Operación global autorizada para inspeccionar excepciones y reprogramar recepciones agotadas. |
+
+El frontend solo abre una URL HTTPS de checkout permitida mientras la orden está pendiente y la reserva vigente. Ni el retorno del navegador ni el contenido de una notificación confirman el pago. El worker obtiene el recurso autoritativo y comprueba `live_mode=false`, vendedor, identificador, importe, COP y referencia exactos. La clave de la inbox deriva del manifest firmado canónico; variaciones equivalentes de firma no eluden deduplicación.
+
+Una aprobación válida consume reservas una vez. Una aprobación tardía, sin reserva o de un segundo pago crea un reembolso durable con clave estable por orden/pago y lectura posterior de confirmación. Reembolsar el segundo pago no cancela el primero aceptado. Antes del despacho, un reembolso verificado restituye inventario una vez; después del despacho/entrega queda en revisión, sin reposición automática. Los contracargos requieren revisión operativa. La política ignora estados pendientes/rechazados antiguos y no revierte un reembolso por una aprobación atrasada.
+
+El simulador sigue siendo el valor predeterminado. Activar sandbox requiere proveedor y flag explícitos, vendedor/comprador de pruebas, secretos y URLs HTTPS accesibles. Los 61 controles de pago usan transporte HTTP controlado y reglas de producción: no acreditan una sesión externa. Configuración y límites completos: `vortexbird-backend/README-payments.md`.
 
 ## 5. Seguridad
 
@@ -253,7 +270,7 @@ Los roles son administrables; no se verifica `if role == ADMIN` en cada controla
 
 ### Claves, secretos y datos
 
-Access tokens propuestos: 5 minutos, con tolerancia de reloj máxima de 30 s. Rotar claves de firma manteniendo temporalmente la anterior en JWKS hasta expirar tokens emitidos; refrescar JWKS ante `kid` desconocido con límites para evitar abuso. Los servicios no aceptan un issuer arbitrario ni desactivan validación TLS en producción. Secrets Manager concentra contraseñas y secretos de proveedor; workloads usan IAM de mínimo privilegio y GitHub Actions asume roles por OIDC, sin claves AWS permanentes.
+Access tokens propuestos: 5 minutos, con tolerancia de reloj máxima de 30 s. Rotar claves de firma manteniendo temporalmente la anterior en JWKS hasta expirar tokens emitidos; refrescar JWKS ante `kid` desconocido con límites para evitar abuso. Los servicios no aceptan un issuer arbitrario ni desactivan validación TLS en producción. Secrets Manager concentra contraseñas y secretos; el diseño AWS del backend utiliza EKS Pod Identity con rol acotado y asociación cluster/namespace/service account. GitHub Actions asume otro rol por OIDC, sin claves AWS permanentes. Identidad de pod, CSI y acceso real a SQS/secretos aún requieren verificación tras desplegar.
 
 PostgreSQL permanece privado, con cifrado, backups y credenciales separadas para migraciones y runtime. Auditoría append-only desde aplicación; protección frente a administradores de base requiere controles adicionales como exportación inmutable y separación de funciones. Se registra identificador de usuario, no token; los cuerpos con PII no se copian íntegros a logs. Webhooks firman cuerpo exacto con HMAC, timestamp y deliveryId, permiten rotación de secreto, restringen ventana de tiempo y conservan protección contra replay.
 
@@ -276,7 +293,16 @@ PostgreSQL permanece privado, con cifrado, backups y credenciales separadas para
 
 El SLO es 99,9% mensual en APIs externas y p95 < 300 ms en stock/precio, bajo un perfil de tráfico acordado. El primero equivale aproximadamente a 43,2 minutos de indisponibilidad en 30 días; es un presupuesto, no disponibilidad medida. La latencia se mide desde el borde y se segmenta por ruta, caché y partner. Una prueba local corta no demuestra disponibilidad mensual ni comportamiento de producción.
 
-Cada partner tiene cuota configurable; canales sensibles pueden tener subcuotas. Se propone comenzar con 100 consultas/s y 10 creaciones/s por partner como valores a validar, no como capacidad demostrada. Token bucket permite ráfagas acotadas. En múltiples réplicas, el límite global debe usar un estado compartido o el gateway; un limitador en memoria solo limita cada réplica. Se responde 429 con `Retry-After`. Se separan pools de checkout y consultas para que el pico de lectura no quite capacidad a confirmaciones y compensaciones.
+La implementación utiliza ventanas fijas de un minuto y presupuestos independientes de partner y canal, configurables entre 10 y 100.000 solicitudes/minuto. `PostgresQuotaStore` comparte contadores entre réplicas: toma un advisory lock por partner, usa el reloj de PostgreSQL, comprueba todos los presupuestos y hace los UPSERT en una transacción. Si alguno se agota, no descuenta parcialmente los demás y devuelve 429 con `Retry-After` hasta el fin de la ventana. Si PostgreSQL falla, responde con indisponibilidad; no concede tráfico ilimitado como fallback.
+
+| Solicitud | Presupuestos consumidos | Protección frente a evasión |
+| --- | --- | --- |
+| Recurso o canal explícito | Partner y canal del recurso | Resuelve el objeto dentro del alcance autorizado; no confía en una cabecera libre. |
+| Listado agregado | Partner y todos los canales autorizados alcanzados | Omitir channelId no evita los límites; no se cargan canales ajenos. |
+| Creación de orden | Partner/canal del cuerpo validado | Límite 64 KiB, UUID único por campo y rechazo de ambigüedades; el body sigue disponible para el handler. |
+| Identidad y administración global | Límite aplicable al contexto, más techo exterior | No se inventa un canal a partir de X-Channel-Id; los endpoints de identidad no consumen cuotas de lectura de todos los canales. |
+
+Una ventana fija puede permitir una ráfaga alrededor de su frontera. Token bucket o una ventana deslizante son alternativas si el perfil de promoción lo exige. La solución actual añade una operación transaccional de cuota a cada petición y serializa contadores de un mismo partner: esto protege consistencia, pero su costo y contención deben medirse antes de prometer p95. Se aprobaron 17 pruebas de planificación/parser y siete comprobaciones SQL en una sesión embebida; no se ha medido concurrencia entre réplicas Npgsql. Separar capacidad de consulta y checkout continúa siendo una decisión operativa por verificar.
 
 ### Política de caché propuesta
 
@@ -288,13 +314,19 @@ Cada partner tiene cuota configurable; canales sensibles pueden tener subcuotas.
 | Catálogo | partner:sku:versión | 5 min | Evento de catálogo; artículo desactivado se verifica al ordenar. |
 | Política de partner | partner:policyVersion | 30 s | Invalidación inmediata al cambiar permisos/canales/cuota. |
 
-Cache-aside simplifica lecturas; se requiere evitar stampede con single-flight o lease corto, TTL con jitter y límite de concurrencia al origen. Si Redis falla, se consulta la proyección PostgreSQL con admisión acotada, no se redirige todo el tráfico a ERP. No se ofrece stock stale ilimitado. La disponibilidad consultada orienta; la reserva válida decide. Un caché de precio no autoriza cobrar un precio vencido.
+La tabla anterior es la política objetivo. El incremento cachea stock durante 10 s y cotización durante 60 s. El cliente RESP2 implementado admite TLS `rediss`, AUTH, selección de base y respuestas acotadas; fuera de Development exige TLS y contraseña si Redis está configurado. No imprime endpoint, credenciales ni respuestas sensibles. El deadline configurable es de 50 a 5.000 ms, con 1.000 ms por defecto; errores de red/protocolo/JSON producen miss y retorno a la proyección PostgreSQL, manteniendo las cuotas. La cancelación de la petición se propaga.
+
+Cache-aside simplifica lecturas; single-flight, jitter e invalidación completa deben verificarse bajo carga. Si Redis falla, no se envía toda la demanda al ERP. La disponibilidad consultada orienta y la reserva decide. Las 32 comprobaciones del cliente cubren configuración, TLS/AUTH y protocolo en transporte controlado; no acreditan conexión a ElastiCache, failover ni rendimiento. El timestamp de la proyección local no certifica frescura respecto de WMS real.
 
 ### Integraciones y mensajería
 
 Cada adaptador tiene timeout total, concurrencia máxima y circuit breaker independientes. Valores iniciales propuestos: lectura externa 800 ms, pago 3 s; el flujo p95 < 300 ms no debe depender de esas llamadas en cada consulta. Reintentar como máximo dos veces únicamente fallos transitorios e idempotentes, con backoff exponencial y jitter dentro del deadline global. No reintentar 4xx de negocio ni acumular retries en gateway, cliente y adaptador a la vez. Un timeout de escritura necesita consulta por referencia antes de repetición.
 
-SQS utiliza visibility timeout mayor que el procesamiento esperado y renovación cuando sea necesario; el mensaje se borra solo después del commit exitoso. DLQ tras cinco recepciones fallidas es el punto de partida; retención propuesta de 14 días. Un operador corrige causa, inspecciona mensajes redaccionados y ejecuta redrive gradual, con consumer idempotente y rate limit. La DLQ es una cola de excepciones, no una solución que garantice entrega eventual por sí sola.
+En `Messaging__Provider=sqs`, el publicador reclama un evento y lo marca `published` solo tras respuesta de SQS. El consumidor usa long polling de 20 s, una recepción por ciclo y visibility de 120 s por defecto. El trabajo tiene deadline menor que la visibilidad; no se declara una renovación periódica implementada. Un fallo conserva el mensaje y modifica visibilidad con backoff; mensajes venenosos no se eliminan para permitir redrive a DLQ tras cinco recepciones. En el modo `local`, el dispatcher invoca al mismo consumidor durable sin pasar por AWS.
+
+La inbox compara evento, partner y fingerprint contra el outbox confiable antes de reclamar `(eventId, consumer)`. Leases y finalizaciones condicionadas evitan que un worker antiguo sobrescriba al nuevo. Solo después de finalizar de forma durable se elimina el mensaje SQS. Un crash entre el efecto de negocio y la finalización puede repetir el handler: cada efecto necesita idempotencia propia; no hay exactly-once. Una finalización confirmada prevalece sobre un timeout ambiguo del publicador y no retrocede a `published`.
+
+El endpoint AWS se restringe a la región y cuenta/cola configuradas. `ServiceUrl` HTTP se permite únicamente en Development hacia el emulador autorizado; las credenciales de emulación no se usan en AWS. Se aprobaron 20 controles de orquestación y nueve del pipeline AWS Core, incluidas firmas con credenciales de sesión sintéticas y HTTP controlado. El overlay ElasticMQ y la cola/DLQ están preparados, sin ejecución externa acreditada. Un operador corrige la causa y realiza redrive gradual con permisos y cuotas; la DLQ conserva excepciones, no garantiza que terminen procesadas. Los parámetros y EKS Pod Identity deben comprobarse en el entorno desplegado.
 
 ### Plan de promociones y evidencia
 
@@ -413,9 +445,6 @@ Priorizaría pruebas en las fronteras donde un fallo cuesta dinero: reserva conc
 
 Estas referencias apoyan las decisiones; los parámetros operativos concretos son propuestas que deben validarse:
 
-- [Microsoft: política de soporte .NET](https://dotnet.microsoft.com/en-us/platform/support/policy).
-- [Keycloak: adaptador JavaScript y PKCE](https://www.keycloak.org/securing-apps/javascript-adapter).
-- [RFC 9457: Problem Details](https://www.rfc-editor.org/rfc/rfc9457.html).
-- [PostgreSQL: bloqueo explícito](https://www.postgresql.org/docs/current/explicit-locking.html) y [SELECT](https://www.postgresql.org/docs/current/sql-select.html).
-- [AWS: timeout de visibilidad SQS](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html) y [DLQ/entrega](https://aws.amazon.com/sqs/faqs/).
-- Documentos locales: `adr/`, `diagrams/`, `presentation-guide.md`, `implementation-status.md` y README de cada repositorio.
+- Plataforma e identidad: [soporte .NET](https://dotnet.microsoft.com/en-us/platform/support/policy) y [Keycloak/PKCE](https://www.keycloak.org/securing-apps/javascript-adapter).
+- Contratos y persistencia: [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457.html), [bloqueo PostgreSQL](https://www.postgresql.org/docs/current/explicit-locking.html) y [SELECT](https://www.postgresql.org/docs/current/sql-select.html).
+- Proveedores: [SQS visibility](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html), [SQS/DLQ](https://aws.amazon.com/sqs/faqs/), [cuentas de prueba Mercado Pago](https://www.mercadopago.com.co/developers/es/docs/checkout-pro-preferences/test-accounts), [preferencias](https://www.mercadopago.com.co/developers/en/reference/online-payments/checkout-pro-preferences/create-preference/post) y [notificaciones](https://www.mercadopago.com.co/developers/es/docs/checkout-pro-orders/resources/notifications/webhooks).

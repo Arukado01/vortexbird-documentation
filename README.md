@@ -9,10 +9,13 @@ Repositorio independiente de documentación para la plataforma de interoperabili
 - `presentation-guide.md`: recorrido de demo, preguntas y defensa de decisiones.
 - `implementation-status.md`: estado observado y límites de verificación.
 - `acceptance-checklist.md`: cada criterio del texto pegado, su estado y evidencia.
+- El assessment distingue simulador predeterminado, checkout sandbox y SQS implementados con pruebas controladas, cuotas PostgreSQL compartidas y las ejecuciones externas todavía pendientes.
 - `scripts/build_pdf.py`: construcción reproducible del PDF con ReportLab.
 - `scripts/validate_docs.py`: comprobación estructural de entregables.
 
 ## Validación
+
+Documento de nueve secciones, PDF de 20 páginas revisado visualmente, diez diagramas y ocho ADR. La corrida integral aprobó 268 controles de aplicación/frontend; SQL45 e infraestructura34+6 se registran por separado. Consultar `implementation-status.md` y `../qa/verification-summary.json` para alcances y limitaciones.
 
 ```powershell
 python scripts/validate_docs.py

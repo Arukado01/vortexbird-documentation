@@ -5,6 +5,7 @@ flowchart TD
   pods --> rds["RDS PostgreSQL privado"]
   pods --> redis["ElastiCache privado"]
   pods --> sqs["SQS y DLQ"]
-  pods --> secrets["Secrets Manager e IAM"]
+  pods --> secrets["Secrets Manager / Pod Identity backend"]
   pods --> metrics["CloudWatch y trazas"]
   note["IaC preparada: no desplegado"] -.-> pods
+  identity["Keycloak y CNI: IRSA"] -.-> pods

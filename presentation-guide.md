@@ -18,9 +18,10 @@
 2. Confirmar health/readiness, inicio de sesión y seed de AndesRetail. Mantener visible que ERP/WMS/OMS/CRM son simulados.
 3. Elegir un SKU con inventario suficiente y un partner/canal autorizado. No usar PII ni credenciales reales.
 4. Crear una orden con clave idempotente y guardar la respuesta. Repetir exactamente la petición; luego cambiar la cantidad conservando la clave para mostrar conflicto.
-5. Inducir rechazo de pago mediante el simulador si la versión implementada permite ese modo. Mostrar cancelación, liberación e historial. Un timeout se explica como incertidumbre, no como rechazo automático.
+5. Inducir rechazo de pago mediante el simulador y mostrar cancelación, liberación e historial. Si existe una cuenta sandbox configurada y verificada, consultar checkout, abrir la URL permitida y explicar que el navegador no confirma el pago: inbox, consulta autoritativa y saga deciden. Un timeout deja `unknown` y no repite el POST de creación.
 6. Abrir Activity Log por correlation-id y relacionar orden, pago y evento. Mostrar permisos efectivos con un usuario limitado.
-7. Presentar los resultados de pruebas realmente ejecutadas. Si Docker o AWS no pudieron verificarse, decirlo y mostrar la configuración preparada sin convertirla en evidencia de ejecución.
+7. Mostrar la cuota del canal y explicar cómo consume también el presupuesto del partner en PostgreSQL. Un listado agregado alcanza todos los canales autorizados; quitar channelId no evita el límite. No afirmar que se midió concurrencia entre réplicas si solo se ejecutó la prueba SQL embebida.
+8. Presentar los resultados de pruebas realmente ejecutadas. Si Docker, navegador integrado o AWS no pudieron verificarse, decirlo y mostrar la configuración preparada sin convertirla en evidencia de ejecución.
 
 ## Preguntas probables y argumento central
 
@@ -28,7 +29,11 @@
 
 **¿Cómo evitas sobreventa si consultas desde Redis?** La consulta es orientativa y tiene frescura explícita; la reserva autoritativa es atómica y decide la venta. Invalidación y TTL reducen inconsistencias, pero no reemplazan esa reserva.
 
-**¿Qué pasa si cobras y se cae la API?** Referencia estable, estado durable y conciliación por proveedor. La respuesta perdida no autoriza un segundo cobro. El outbox evita perder la intención de notificar, no vuelve atómica a la pasarela.
+**¿Qué pasa si cobras y se cae la API?** La intención se persiste antes de llamar al proveedor. Una respuesta perdida deja estado unknown y se busca por referencia sin repetir el POST. El callback se guarda antes del acuse; la conciliación obtiene el pago autoritativo y verifica vendedor, importe, moneda y referencia. El outbox conserva la intención de notificar, pero no vuelve atómica a la pasarela.
+
+**¿Qué sucede con una aprobación tardía o un segundo pago?** La política comprueba la reserva vigente y el pago aceptado. Si ya no corresponde cumplir, agenda un reembolso con clave estable y verifica el estado después. El segundo pago se compensa por separado sin cancelar el primero. Antes del despacho puede restituirse inventario una vez; después exige revisión. Estas reglas tienen pruebas aisladas, todavía no una sesión externa acreditada.
+
+**¿El límite por partner funciona con varias réplicas?** El estado está compartido en PostgreSQL y la decisión usa lock, reloj DB y transacción. Las pruebas actuales cubren planificación, parser y SQL en una sesión; faltan carreras Npgsql y carga para medir contención y latencia. La ventana fija y el bloqueo por partner son trade-offs explícitos.
 
 **¿Hay exactly-once?** No end-to-end. Hay entrega al menos una vez y efectos diseñados para ser idempotentes. Una transacción local puede unir inbox y efecto DB, pero un efecto externo necesita idempotencia propia.
 
