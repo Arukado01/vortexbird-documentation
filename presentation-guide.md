@@ -1,5 +1,30 @@
 # Guía de sustentación
 
+## Cómo estudiar y practicar con la plataforma local
+
+1. Lee las secciones 1 y 3 del assessment para entender el problema y el recorrido entre portal, API, PostgreSQL y adaptadores. Abre el diagrama [01 - Arquitectura](diagrams/01-architecture.mmd).
+2. Entra al [portal local](http://localhost:5173). Usa el correo y la contraseña de demostración definidos como `DEMO_EMAIL` y `DEMO_PASSWORD` en `vortexbird-infrastructure/.env`. En **Dashboard**, compara los estados y el volumen de E-commerce y Marketplace. Luego abre **Órdenes** y sigue un caso de principio a fin.
+3. Abre el historial del pedido y revisa qué estado cambió y por qué. Pasa por **Pagos** e **Inventario** para entender cuándo se consume una reserva y cuándo se libera. En **Eventos** y **Activity Log**, usa el ID de correlación para relacionar la orden con el trabajo asíncrono y con la auditoría.
+4. Lee la sección 4 del assessment y los diagramas de [creación de orden](diagrams/05-create-order.mmd), [saga](diagrams/08-saga.mmd) y [eventos](diagrams/09-events.mmd). Explica en voz alta qué queda guardado al recibir el `202` y qué completa el worker.
+5. Abre [Swagger](http://localhost:15080/swagger/index.html). Ejecuta `POST /api/v1/auth/demo-login` con los datos de demo, copia `accessToken` en **Authorize** y consulta `GET /api/v1/orders/{id}`. Prueba luego `POST /api/v1/orders` con una clave nueva en `Idempotency-Key`. Repite la misma solicitud para ver el mismo ID. Cambia la cantidad conservando la clave para observar el `409`. En PowerShell, el lanzador `Iniciar-VortexBird.cmd` reconstruye las imágenes locales cuando hay cambios.
+6. En **Integraciones**, usa **Probar conexión** para ver una ejecución del adaptador simulado. Lee las secciones 5 a 7 del assessment para explicar autorización por partner y canal, Redis, reintentos y observabilidad. Consulta `implementation-status.md` junto con el manifiesto de evidencia `../qa/release-manifest.json` para distinguir las pruebas locales de lo pendiente en AWS.
+
+### Pedidos para el ensayo local
+
+El 14 de noviembre de 2026 se agregaron 30 pedidos por la API en la base de datos local. Al verificar, había 48 pedidos en total, incluidos 18 anteriores, y 30 pagos simulados.
+
+| Caso | Qué observar |
+| --- | --- |
+| [CUST-001 · Entregado](http://localhost:5173/orders/72aef47a-77cf-4d45-ba27-43a68873d9de) | Reserva, pago aprobado, confirmación, despacho y entrega. |
+| [CUST-007 · Despachado](http://localhost:5173/orders/da7a3336-2cb7-496e-b4cf-a01e801272f7) | Pago aprobado y entrega aún pendiente. |
+| [CUST-011 · Confirmado](http://localhost:5173/orders/af11dd2d-b418-4f6a-b6c3-6a2869807a4d) | Inventario consumido y listo para despachar. |
+| [CUST-019 · Pago rechazado](http://localhost:5173/orders/d1d67108-9acf-46ca-8966-df468164a7ce) | El historial pasa por compensación y cancelación. |
+| [CUST-026 · Pago pendiente al verificar](http://localhost:5173/orders/f9ef2271-12f0-4e58-9f66-ae998b72b47e) | Reserva temporal en Marketplace. Si ya venció, crea otra orden con **Pendiente** en el simulador. |
+
+### Explicación de apertura
+
+«VortexBird conecta los canales de venta de AndesRetail con inventario, precios, clientes y pagos. Voy a mostrar una orden desde que se reserva inventario hasta que se confirma o se cancela. La operación queda persistida en PostgreSQL y los adaptadores de la demo simulan las respuestas de los sistemas externos».
+
 ## Recorrido sugerido: 20 minutos
 
 | Tiempo | Contenido | Evidencia |
