@@ -1,0 +1,27 @@
+{
+  "date": "2026-11-17",
+  "source_request": "Texto pegado(9).txt",
+  "overall_status": "Validación parcial; despliegue AWS pendiente",
+  "local_blocker": "El entorno rechaza conexiones de loopback con socket 10013. Vite y PostgreSQL iniciaron procesos, pero no se verificó comunicación entre servicios. Java ElasticMQ rechazó LoopbackConnector con Permission denied.",
+  "aws_status": "No desplegado. La puerta de validación integral local no se superó y no existe presupuesto aprobado. No se ejecutó terraform apply ni se crearon recursos en esta revisión.",
+  "cost": "Reserva orientativa propuesta: USD 220-290/mes con identidad. Subtotal estimado USD 183,59-233,59. Referencias y supuestos en costs-and-approval.md. No es cotización Ohio, presupuesto aprobado ni gasto incurrido.",
+  "tests": [
+    {"name":"Backend .NET","result":"260 comprobaciones aprobadas; build y publish sin advertencias ni errores","limit":"Pruebas en proceso y transportes controlados. PostgreSQL y proveedores conectados no revalidados."},
+    {"name":"Frontend unitario","result":"22 pruebas aprobadas; build TypeScript/Vite y lint aprobados","limit":"Lógica y componentes locales. No acredita conectividad con backend."},
+    {"name":"Interfaz Chromium","result":"20 aprobadas; 2 omisiones previstas; 31,3 s","limit":"Interfaz real con respuestas API sintéticas e interceptadas. No es E2E del conjunto de servicios."},
+    {"name":"Infraestructura local","result":"36 controles de configuración y 6 de aprobación CI aprobados","limit":"Parser de seis scripts y ValidateOnly aprobados. Terraform con proveedor: validate/test bloqueados; resultados históricos no repetidos."},
+    {"name":"Entorno conectado","result":"Bloqueado por socket 10013 / Permission denied","limit":"No se revalidaron sesión Keycloak, persistencia TCP, Redis ni ElasticMQ integrados."},
+    {"name":"AWS","result":"No desplegado; puerta local sin superar","limit":"Sin plan real aprobado, presupuesto, endpoints ni smoke remoto acreditados."}
+  ],
+  "screenshots": [
+    {"path":"../vortexbird-frontend/public/help-media/acceso.png","title":"Acceso y centro de ayuda","caption":"Captura de la interfaz actual del 17-Nov-2026. Chromium aislado y respuestas de API interceptadas; no demuestra autenticación real con Keycloak."},
+    {"path":"../vortexbird-frontend/public/help-media/dashboard.png","title":"Dashboard de operación","caption":"Captura de la interfaz actual del 17-Nov-2026 con datos sintéticos. No representa métricas productivas ni prueba de servicios conectados."}
+  ],
+  "external_pending": [
+    "Recorrido completo con PostgreSQL, Redis, Keycloak y mensajería conectados.",
+    "Sesión OIDC real, refresh, logout y recuperación con SMTP.",
+    "Mercado Pago Sandbox con credenciales válidas, sin dinero real.",
+    "Cuenta AWS, plan real revisable, presupuesto, DNS, ACM e identidad HTTPS.",
+    "Pruebas de carga, recuperación, permisos AWS efectivos y smoke remoto."
+  ]
+}
