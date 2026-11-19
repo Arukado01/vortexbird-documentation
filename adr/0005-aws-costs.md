@@ -1,5 +1,7 @@
 # ADR 0005 - AWS declarativo y separación de perfiles
 
+La decisión inicial de despliegue se actualizó en [ADR 0009](0009-ecs-fargate-pilot.md). Este registro conserva el contexto de la alternativa EKS.
+
 Estado: propuesta preparada, sin autorización de provisión. Fecha: 2026-11-13.
 
 Contexto: el usuario propone AWS/EKS, región inicial us-east-2, y exige aprobación antes de crear recursos facturables.

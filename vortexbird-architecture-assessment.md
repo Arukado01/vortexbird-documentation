@@ -1,8 +1,8 @@
 # VortexBird Integration Platform
 
 **AndesRetail | Assessment de arquitectura senior**  
-Versión de trabajo: 13 de noviembre de 2026. Autoría: propuesta técnica para sustentación.  
-Fuentes de requisitos: `VB.TST.Assessment-Senior-Arq.V.1.2 (1).pdf` y `Texto pegado(5).txt`.
+Revisión integral del 17 de noviembre de 2026. Estado: validación parcial, plataforma conectada y AWS pendientes.
+Fuentes de requisitos: `VB.TST.Assessment-Senior-Arq.V.1.2 (1).pdf` y solicitudes de implementación y cierre del 17 de noviembre de 2026.
 
 **Cómo leer este documento.** La arquitectura productiva es un objetivo; no constituye evidencia de un despliegue existente. La implementación local utiliza sistemas empresariales simulados, identificados como tales. Las capacidades y validaciones efectivamente terminadas se registran en `implementation-status.md`. Los objetivos 99,9% y p95 < 300 ms requieren validación operativa y de carga. Los ejemplos de liderazgo del apartado 9 son escenarios propuestos, no experiencias personales atribuidas al candidato.
 
@@ -22,7 +22,7 @@ Proponemos una capa de interoperabilidad con contratos de negocio estables, adap
 - Medir los flujos con correlation-id, trazas, métricas y auditoría, acompañados de alertas accionables y procedimientos de recuperación.
 - Evolucionar hacia AWS con infraestructura declarativa y perfiles de demostración y producción, previa revisión de costos y aprobación explícita.
 
-El beneficio de negocio es reducir duplicados y ventas inconsistentes, incorporar canales con menor cambio en los sistemas centrales y acortar la detección y recuperación de incidentes. La plataforma no elimina la consistencia eventual: la vuelve explícita, medible y reconciliable. El incremento incluye simuladores y código de checkout sandbox opcional, con evidencia de pruebas aisladas. La sesión externa de pagos, la ejecución integrada sobre PostgreSQL y los SLO aún requieren verificación. La operación productiva requiere el roadmap de 4-6 semanas, 3 meses y 6 meses descrito más adelante.
+El beneficio de negocio esperado es reducir duplicados, incorporar canales con menor cambio en los sistemas centrales y acortar la recuperación de incidentes. La revisión anterior documentó PostgreSQL 17.12 y ElasticMQ; esas conexiones no pudieron repetirse ahora por socket 10013. La cuenta externa de pagos y los SLO requieren verificaciones adicionales. El roadmap combina piloto de 4-6 semanas y horizontes de 3 y 6 meses.
 
 ## 2. Preguntas, supuestos y riesgos
 
@@ -75,14 +75,14 @@ El beneficio de negocio es reducir duplicados y ventas inconsistentes, incorpora
 
 ## 3. Arquitectura de alto nivel
 
-![Arquitectura general: implementación local y frontera objetivo](diagrams/rendered/01-architecture.png)
+**Referencia visual:** Arquitectura general, en el atlas vectorial.
 
 ### Componentes y propiedad
 
 | Componente | Responsabilidad | Límite explícito |
 | --- | --- | --- |
 | Portal React | Operación, administración y consulta; OIDC en navegador | No autoriza por sí solo ni guarda secretos de partners. |
-| API Gateway | TLS, protección de borde, cuotas, routing, límites de payload | No contiene la saga ni transformaciones del ERP. |
+| ALB | Terminación TLS, routing y descarte de cabeceras inválidas. | Las cuotas y la autorización se aplican en la API. |
 | API .NET | Contratos, validación, permisos/contexto y despacho de casos de uso | No confía en cabeceras de identidad arbitrarias. |
 | Application/Domain | Comandos, consultas, reglas, saga y eventos de negocio | Independientes de protocolos y tablas externas. |
 | Infrastructure | EF/PostgreSQL, caché, adaptadores, outbox y mensajería | Implementa puertos definidos hacia el interior. |
@@ -97,8 +97,39 @@ El beneficio de negocio es reducir duplicados y ventas inconsistentes, incorpora
 2. **CQRS sin event sourcing.** Comandos validan invariantes; consultas agregan y paginan en PostgreSQL. El estado actual y el historial son persistentes; el log de eventos no se presenta como fuente única reconstruible. Event sourcing añadiría complejidad no justificada por este caso.
 3. **Saga orquestada.** El estado del flujo se concentra en órdenes, con pasos y compensaciones visibles. Facilita explicar qué quedó reservado o pendiente. Frente a coreografía, sacrifica autonomía para ganar trazabilidad y control en un dominio pequeño.
 4. **Outbox y entrega al menos una vez.** Un commit local guarda cambio y evento. El publicador puede enviar y fallar antes de marcar: habrá duplicados. Inbox/deduplicación y operaciones idempotentes son obligatorios; no se promete exactly-once end-to-end.
-5. **Transporte local y SQS opcional.** El outbox usa por defecto consumo local durable. La variante SQS tiene publicador, consumidor e inbox persistente; el marshalling JSON propio se apoya en el pipeline oficial `AWSSDK.Core` para credenciales, SigV4, HTTP y retry. No se presenta como instalado el paquete generado `AWSSDK.SQS`. La ejecución AWS/ElasticMQ permanece pendiente. El contrato actual acepta eventos del propio outbox verificados por hash y partner, no un bus abierto a productores externos. Fan-out futuro requiere SNS/EventBridge o varias colas, no consumidores competidores que reciban todos el mismo evento.
-6. **EKS como objetivo evaluado.** Aporta estándares Kubernetes y portabilidad, pero suma control plane, nodos, ingress y operación. Para una demo, Compose local y un perfil cloud reducido ofrecen menor costo; producción demanda HA, restauración probada y monitoreo.
+5. **Transporte local y SQS.** Compose usa transporte local por defecto. La variante AWS publica y consume con AmazonSQSClient detrás de IQueueTransport. El inbox exige coincidencia con el outbox, hasta y después de una reentrega. El emulador verifica el protocolo. SQS real y fan-out quedan como etapas separadas.
+6. **ECS Fargate como destino inicial.** El frontend, la API y el worker escalan como servicios distintos. Compose conserva el ciclo local. La alternativa EKS conserva sus manifests, Terraform y workflows.
+
+### ECS con Fargate frente a EKS
+
+| Criterio | Amazon ECS con Fargate | Amazon EKS con Kubernetes |
+| --- | --- | --- |
+| Costos | Cómputo por vCPU, memoria y almacenamiento de cada tarea. Añadir ALB, red, RDS, Redis y logs. | Clúster más cómputo. La tarifa del plano de control depende del soporte y debe verificarse regionalmente antes de comparar costos. Añadir nodos o Fargate y los mismos servicios. |
+| Operación y mantenimiento | AWS administra orquestación y hosts. El equipo mantiene tareas, redes, imágenes y despliegues. | AWS administra el plano de control. El equipo mantiene versiones, add-ons, ingress, políticas, manifests y, según modalidad, nodos. |
+| Escalabilidad | Escalado independiente de API y workers por CPU, solicitudes o antigüedad de cola. Controlar conexiones RDS y backpressure. | HPA y escalado de capacidad con mayor flexibilidad. Requiere operar métricas, requests/limits y políticas de capacidad. |
+| Alta disponibilidad | Servicios en al menos dos AZ, ALB y verificación de salud. Ensayar pérdida de tareas y dependencias. | Réplicas por AZ, restricciones topológicas y presupuestos de disrupción. Ensayar evacuación de nodos. |
+| Seguridad | IAM por tarea, red privada, Secrets Manager y permisos mínimos de colas. | IAM por workload, RBAC, políticas de red y control de admisión. Evaluar Pod Identity e IRSA. |
+| Observabilidad | CloudWatch y métricas por servicio y tarea. Correlación de negocio en la aplicación. | Métricas por clúster, nodo y pod. Añade instrumentación para add-ons, ingress y workloads. |
+| Curva de aprendizaje | Menor esfuerzo inicial para un equipo familiarizado con AWS y contenedores. | Mayor esfuerzo en red, RBAC, diagnóstico y ciclo de versiones de Kubernetes. |
+| Portabilidad | Imágenes OCI y contratos HTTP portables. Definiciones de tareas y despliegue específicos de AWS. | Manifests portables entre clústeres con adaptación de IAM, red, almacenamiento y servicios administrados. |
+
+**Decisión adoptada.** El primer despliegue será ECS con Fargate. Terraform define red de dos AZ, ALB, ECR, servicios privados, RDS, Redis TLS opcional, logs, roles y SQS. La API registra el outbox y el worker usa su imagen de backend para procesar la cola de forma independiente. El ALB enruta /api/* y la SPA conserva enlaces profundos. El repositorio mantiene una raíz separada para EKS.
+
+**Referencia visual:** Arquitectura AWS, en el atlas vectorial.
+
+Los perfiles Development, Staging y Production separan red y estado. El modo cloud deshabilita login demo. Un plan simulado validó bootstrap y habilitación de tareas. Plan real, costo, DNS, ACM, Keycloak, migraciones, secretos y digests de ECR quedan para el piloto autorizado. EKS se reevalúa si surge una necesidad de plataforma Kubernetes compartida, controladores especializados o portabilidad operativa.
+
+Referencias oficiales de AWS. [Guía de decisión de contenedores](https://docs.aws.amazon.com/decision-guides/latest/decision-guides/choosing-aws-container-service.html), [Precios de Fargate](https://aws.amazon.com/fargate/pricing/) y [Precios de EKS](https://aws.amazon.com/eks/pricing/).
+
+### Arquitectura del centro de ayuda
+
+El portal React carga el catálogo y sus enlaces directos en /help y /help/{manualId}. Login, registro y recuperación muestran el acceso antes de redirigir al proveedor de identidad. El layout mantiene una entrada global y una contextual que conserva el origen. La relación entre ruta y manual está centralizada en HelpLink y manualByRoute.
+
+El frontend versiona once manuales públicos. Visitantes pueden leer todos los procedimientos generales, buscar preguntas frecuentes e imprimir. La lectura no depende de /auth/me. Cada procedimiento muestra el permiso para operar. Las acciones del workspace y los endpoints siguen aplicando autorización y alcance por partner y canal. Runbooks privados y secretos permanecen fuera de los archivos distribuidos.
+
+La búsqueda tolera tildes y combina filtros por módulo y perfil. Las URL conservan filtros y enlaces a guías. El lector incluye índice, preguntas frecuentes, historial, modo claro y oscuro y estilos A4 para imprimir o guardar desde el navegador.
+
+**Referencia visual:** Centro de documentación viva, en el atlas vectorial.
 
 ### Sync versus async
 
@@ -114,7 +145,7 @@ El beneficio de negocio es reducir duplicados y ventas inconsistentes, incorpora
 
 ### Contratos y transformación
 
-El gateway valida tamaño, frecuencia y el token como defensa de borde. La API repite validación criptográfica y contextual; Application valida el caso de uso, Domain protege invariantes y cada adaptador traduce códigos, unidades y estados del proveedor. Las transformaciones no se dispersan en controladores ni en el frontend. Los DTO públicos usan `/api/v1`; un cambio aditivo compatible no obliga a v2. Cambios incompatibles requieren una nueva versión, ventana de convivencia, métricas por consumidor y fecha de retirada comunicada. Los eventos llevan tipo y versión de esquema independientes.
+En el piloto, el ALB termina HTTPS y enruta. La API aplica validación criptográfica, tamaños de payload y cuotas por partner y canal. Application valida el caso de uso, Domain protege invariantes y los adaptadores traducen contratos externos. Los DTO usan /api/v1. Los eventos mantienen tipo y versión de esquema.
 
 ## 4. Diseño de la capa de interoperabilidad
 
@@ -177,8 +208,7 @@ Content-Type: application/json
   "channelId": "22222222-2222-2222-2222-222222222222",
   "storeId": "BOG-01",
   "customerId": "CUST-001",
-  "items": [{ "sku": "AND-0001", "quantity": 2 }],
-  "paymentOutcome": "approved"
+  "items": [{ "sku": "AND-0001", "quantity": 2 }]
 }
 ```
 
@@ -194,7 +224,7 @@ Content-Type: application/json
 }
 ```
 
-Se responde `202 Accepted` con `Location: /api/v1/orders/{id}` después de persistir orden, reserva y outbox. El worker inicia el proveedor configurado; consultar la orden informa la evolución. El ejemplo utiliza el simulador predeterminado. El servidor calcula precio e importe. `partnerId` es obligatorio en el cuerpo y se contrasta con el contexto autenticado; enviarlo no concede acceso. `paymentOutcome` controla exclusivamente la demostración y se ignora por el gateway externo: no permite aprobar un pago real. Repetir la clave válida devuelve el recibo original y `replayed: true`.
+Se responde `202 Accepted` con `Location: /api/v1/orders/{id}` después de persistir orden, reserva y outbox. El worker inicia el proveedor configurado; consultar la orden informa la evolución. El servidor toma el proveedor de la configuración y calcula el precio e importe. `partnerId` es obligatorio en el cuerpo y se contrasta con el contexto autenticado; enviarlo no concede acceso. El contrato público rechaza propiedades desconocidas con HTTP 400. La simulación se tramita en POST /api/v1/simulations/orders y POST /api/v1/payments/{id}/simulate, registrados únicamente en Development con Simulator y sujetos a permisos y alcance de partner. El gateway externo recibe un PaymentRequest sin resultado simulado. Repetir la clave válida devuelve el recibo original y replayed: true.
 
 ### Error consistente
 
@@ -224,7 +254,7 @@ La reserva implementada aplica una actualización condicional `OnHand - Reserved
 
 ### Saga y recuperación
 
-![Saga de orden: estados y compensaciones](diagrams/rendered/08-saga.png)
+**Referencia visual:** Saga y compensaciones, en el atlas vectorial.
 
 El flujo de orden usa `pending -> reserved -> awaiting_payment -> confirmed` o `compensating -> cancelled`; admite `shipped -> delivered` después de confirmar. El worker deduplica mensajes y cancela reservas vencidas. El checkout externo tiene su propio estado: `creating`, `pending`, `unknown`, `approved`, `cancelled`, `refund_pending`, `refunded` o `manual_review`. Una respuesta incierta queda `unknown`; no se convierte en rechazo ni en una segunda creación automática. Estos caminos tienen código y pruebas de reglas/transporte controlado; la ejecución completa contra PostgreSQL y Mercado Pago sigue pendiente.
 
@@ -255,22 +285,25 @@ En el portal se utiliza Authorization Code con PKCE S256 contra Keycloak; es un 
 
 Los canales máquina a máquina usan client credentials, una identidad por partner y scopes mínimos. No comparten credenciales de un usuario humano. Para producción se prefieren credenciales rotables y, cuando el proveedor lo permita, autenticación asimétrica del cliente. Una ruta de acceso demo, si se habilita, exige entorno Development y configuración explícita; nunca sustituye OIDC en producción.
 
-### Gateway y servicios
+### ALB y servicios
 
-| Control | Gateway | Servicio |
+| Control | ALB del piloto | API .NET |
 | --- | --- | --- |
-| TLS y límites de cuerpo | Terminación TLS y rechazo temprano | Conexión confiable y límite secundario. |
-| JWT | Validación de borde si se configura soporte OIDC | Obligatoria: firma, algoritmo permitido, issuer, audience, exp, nbf. |
-| Scopes | Filtro de ruta general | Exige scope apropiado para la acción. |
-| Permisos dinámicos | No decide los permisos del negocio | Consulta roles/permisos efectivos y cuenta activa. |
-| Partner/canal/objeto | Cuota por identidad validada | Verifica relación y filtra cada lectura/escritura. |
-| Correlation-id | Genera o limita formato | Propaga sin tratarlo como credencial. |
+| TLS y límites de cuerpo | HTTPS externo y redirección de HTTP. | Límite de cuerpo y acceso por Security Group. |
+| JWT | Reenvía la ruta API. | Valida firma, issuer, audience, exp y nbf. |
+| Scopes y permisos | Enruta por path. | Aplica scope, permisos efectivos y cuenta activa. |
+| Partner/canal/objeto | Enruta hacia la API privada. | Valida relaciones, aplica cuota y filtra lecturas y escrituras. |
+| Correlation-id | Reenvía cabeceras válidas. | Valida o genera identificador para correlación. |
 
 Los roles son administrables; no se verifica `if role == ADMIN` en cada controlador. Una política de permiso calcula la unión efectiva de roles vigentes y aplica restricciones de partner/canal. Cambiar permisos invalida caché/versiona la política; mantener una caché sin invalidación dejaría acceso revocado durante demasiado tiempo. Roles protegidos y asignación de privilegios exigen permisos propios y auditoría. Se prohíbe escalar privilegios asignando permisos que el actor no está autorizado a delegar.
 
 ### Claves, secretos y datos
 
-Access tokens propuestos: 5 minutos, con tolerancia de reloj máxima de 30 s. Rotar claves de firma manteniendo temporalmente la anterior en JWKS hasta expirar tokens emitidos; refrescar JWKS ante `kid` desconocido con límites para evitar abuso. Los servicios no aceptan un issuer arbitrario ni desactivan validación TLS en producción. Secrets Manager concentra contraseñas y secretos; el diseño AWS del backend utiliza EKS Pod Identity con rol acotado y asociación cluster/namespace/service account. GitHub Actions asume otro rol por OIDC, sin claves AWS permanentes. Identidad de pod, CSI y acceso real a SQS/secretos aún requieren verificación tras desplegar.
+El emisor y el cliente de Keycloak se configuran para el dominio HTTPS aprobado. Las claves JWKS se rotan conforme al ciclo del IdP. GitHub Actions usa OIDC para asumir un rol de plan separado. ECS obtiene credenciales temporales mediante Task Roles. El worker accede solo a las cuatro operaciones necesarias de la cola de eventos. La API y el frontend carecen de políticas SQS. Cada Execution Role obtiene su propia imagen y escribe sus propios logs. API y worker reciben solo su secreto. El equipo de operación controla el redrive mediante otro rol.
+
+**Referencia visual:** Seguridad e IAM, en el atlas vectorial.
+
+En la alternativa Kubernetes se conservan EKS Pod Identity e IRSA con su propia validación. El KMS, el rol de operación, el estado remoto y las credenciales de carga de secretos se preparan según la cuenta autorizada.
 
 PostgreSQL permanece privado, con cifrado, backups y credenciales separadas para migraciones y runtime. Auditoría append-only desde aplicación; protección frente a administradores de base requiere controles adicionales como exportación inmutable y separación de funciones. Se registra identificador de usuario, no token; los cuerpos con PII no se copian íntegros a logs. Webhooks firman cuerpo exacto con HMAC, timestamp y deliveryId, permiten rotación de secreto, restringen ventana de tiempo y conservan protección contra replay.
 
@@ -316,17 +349,23 @@ Una ventana fija puede permitir una ráfaga alrededor de su frontera. Token buck
 
 La tabla anterior es la política objetivo. El incremento cachea stock durante 10 s y cotización durante 60 s. El cliente RESP2 implementado admite TLS `rediss`, AUTH, selección de base y respuestas acotadas; fuera de Development exige TLS y contraseña si Redis está configurado. No imprime endpoint, credenciales ni respuestas sensibles. El deadline configurable es de 50 a 5.000 ms, con 1.000 ms por defecto; errores de red/protocolo/JSON producen miss y retorno a la proyección PostgreSQL, manteniendo las cuotas. La cancelación de la petición se propaga.
 
-Cache-aside simplifica lecturas; single-flight, jitter e invalidación completa deben verificarse bajo carga. Si Redis falla, no se envía toda la demanda al ERP. La disponibilidad consultada orienta y la reserva decide. Las 32 comprobaciones del cliente cubren configuración, TLS/AUTH y protocolo en transporte controlado; no acreditan conexión a ElastiCache, failover ni rendimiento. El timestamp de la proyección local no certifica frescura respecto de WMS real.
+Cache-aside simplifica lecturas; single-flight, jitter e invalidación completa deben verificarse bajo carga. Si Redis falla, no se envía toda la demanda al ERP. La disponibilidad consultada orienta y la reserva decide. Las 32 comprobaciones actuales del cliente cubren configuración, TLS/AUTH y protocolo en transporte controlado; no acreditan conexión a ElastiCache, failover ni rendimiento. El timestamp de la proyección local no certifica frescura respecto de WMS real.
 
 ### Integraciones y mensajería
 
-Cada adaptador tiene timeout total, concurrencia máxima y circuit breaker independientes. Valores iniciales propuestos: lectura externa 800 ms, pago 3 s; el flujo p95 < 300 ms no debe depender de esas llamadas en cada consulta. Reintentar como máximo dos veces únicamente fallos transitorios e idempotentes, con backoff exponencial y jitter dentro del deadline global. No reintentar 4xx de negocio ni acumular retries en gateway, cliente y adaptador a la vez. Un timeout de escritura necesita consulta por referencia antes de repetición.
+El diseño objetivo exige timeout total, concurrencia máxima y circuit breaker independientes por adaptador. Su cobertura efectiva debe verificarse al conectar cada proveedor real. Valores iniciales propuestos: lectura externa 800 ms, pago 3 s; el flujo p95 < 300 ms no debe depender de esas llamadas en cada consulta. Reintentar como máximo dos veces únicamente fallos transitorios e idempotentes, con backoff exponencial y jitter dentro del deadline global. No reintentar 4xx de negocio ni acumular retries en gateway, cliente y adaptador a la vez. Un timeout de escritura necesita consulta por referencia antes de repetición.
 
 En `Messaging__Provider=sqs`, el publicador reclama un evento y lo marca `published` solo tras respuesta de SQS. El consumidor usa long polling de 20 s, una recepción por ciclo y visibility de 120 s por defecto. El trabajo tiene deadline menor que la visibilidad; no se declara una renovación periódica implementada. Un fallo conserva el mensaje y modifica visibilidad con backoff; mensajes venenosos no se eliminan para permitir redrive a DLQ tras cinco recepciones. En el modo `local`, el dispatcher invoca al mismo consumidor durable sin pasar por AWS.
 
 La inbox compara evento, partner y fingerprint contra el outbox confiable antes de reclamar `(eventId, consumer)`. Leases y finalizaciones condicionadas evitan que un worker antiguo sobrescriba al nuevo. Solo después de finalizar de forma durable se elimina el mensaje SQS. Un crash entre el efecto de negocio y la finalización puede repetir el handler: cada efecto necesita idempotencia propia; no hay exactly-once. Una finalización confirmada prevalece sobre un timeout ambiguo del publicador y no retrocede a `published`.
 
-El endpoint AWS se restringe a la región y cuenta/cola configuradas. `ServiceUrl` HTTP se permite únicamente en Development hacia el emulador autorizado; las credenciales de emulación no se usan en AWS. Se aprobaron 20 controles de orquestación y nueve del pipeline AWS Core, incluidas firmas con credenciales de sesión sintéticas y HTTP controlado. El overlay ElasticMQ y la cola/DLQ están preparados, sin ejecución externa acreditada. Un operador corrige la causa y realiza redrive gradual con permisos y cuotas; la DLQ conserva excepciones, no garantiza que terminen procesadas. Los parámetros y EKS Pod Identity deben comprobarse en el entorno desplegado.
+El endpoint productivo se resuelve por región desde AmazonSQSClient. Una URL personalizada solo se permite en Development para el emulador con origen validado. AWS real, IAM efectivo y redrive administrado requieren un entorno autorizado. El worker procesa una entrega por lectura, con polling de 20 s y visibilidad de 120 s.
+
+### SDK oficial y validación de colas
+
+AWSSDK.SQS 4.0.100.26 y AWSSDK.Core 4.0.103 se restauraron y compilaron con .NET 10. El cliente oficial reemplaza el marshalling propio. En esta revisión se aprobaron nueve pruebas con respuestas HTTP controladas y 20 de orquestación durable. La revisión previa documentó dos escenarios TCP con ElasticMQ 1.6.12; no pudieron repetirse ahora. [Documentación oficial AWS SDK para .NET v4 y SQS](https://docs.aws.amazon.com/sdk-for-net/v4/developer-guide/sqs-apis-intro.html).
+
+La revisión histórica de ElasticMQ documentó publicación, recepción, visibilidad, reentrega, acuse, envío automático a DLQ tras cinco recepciones y republicación controlada. El servicio emulado no valida IAM de cuenta, StartMessageMoveTask de AWS ni efectos durables del consumidor sobre un PostgreSQL conectado. La entrega sigue siendo al menos una vez.
 
 ### Plan de promociones y evidencia
 
@@ -394,6 +433,33 @@ Los umbrales son iniciales y requieren ajuste con tráfico real. Se usan ventana
 
 `implementation-status.md` y `acceptance-checklist.md` mantienen evidencia por repositorio y por criterio. No se aprueba ni ejecuta infraestructura facturable desde este documento. Los diagramas distinguen implementación local y arquitectura objetivo; un recurso dibujado no equivale a uno desplegado. Credenciales de prueba de Mercado Pago, dominio/TLS, acceso AWS y publicación GitHub deben verificarse. El plan de infraestructura prepara perfiles demo/producción y un presupuesto provisional, sujeto al cálculo regional y aprobación: ver `vortexbird-infrastructure/costs-and-approval.md` para el detalle vigente.
 
+### Matriz de evidencia de esta revisión
+
+| Capacidad | Estado | Evidencia y alcance |
+| --- | --- | --- |
+| Backend | 260 comprobaciones aprobadas | .NET 10, build/publish sin errores ni advertencias; TestServer y transportes controlados. |
+| Frontend | 22 unitarias aprobadas | Build, lint, recuperación OIDC y paginación de 10. |
+| Interfaz y manuales | 20 Chromium aprobadas y 2 omitidas | Bundle real con API sintética interceptada; capturas actuales. No acredita servicios conectados. |
+| Infraestructura local | 36 controles de configuración y 6 de gate aprobados | Parser de seis scripts y ValidateOnly aprobados; validate/test con proveedor Terraform bloqueados. |
+| PostgreSQL, Redis, Keycloak y ElasticMQ | Validación integral bloqueada | Socket 10013 y LoopbackConnector Permission denied. Iniciar procesos no acredita comunicación. |
+| Pagos simulados concurrentes | Corrección implementada | Limpieza de tracking antes del lock. Ocho resoluciones concurrentes preparadas, no ejecutadas. |
+| Sistemas empresariales | Simulados | ERP, WMS, OMS y CRM locales; sin conexiones reales acreditadas. |
+| AWS y SLO | No desplegados ni medidos | Puerta local no superada, presupuesto y plan real pendientes. |
+
+El total actual de aplicación e interfaz es 302 comprobaciones aprobadas. Los controles estáticos de infraestructura se registran por separado. Los resultados históricos no se suman como ejecuciones actuales.
+
+### Documentación viva y aceptación
+
+El cambio funcional incluye los manuales afectados, nueva versión y fecha ISO, historial conservado y una entrada en DOCUMENTATION_CHANGELOG.md. Las capturas se regeneran con Playwright sobre pantallas actuales y datos sintéticos. La revisión comprueba que pasos, roles, controles y mensajes correspondan al portal. El workflow Frontend quality valida metadatos, rutas, permisos, capturas y el diff documental de cada pull request. El contrato se verifica en Backend quality. DOCUMENTATION_GUIDELINES.md documenta la contribución.
+
+El criterio de terminado cubre implementación, prueba, impacto documental, versión, historial, vistas y CI. Playwright aislado abre y recarga los 11 manuales, lee sus secciones y valida retorno al origen e impresión con respuestas sintéticas.
+
+**Referencia visual:** Centro de documentación viva, en el atlas vectorial.
+
+El informe de cierre incluye comandos, resultados, entornos y límites. GitHub Actions tiene verificación del código y de ambos perfiles de infraestructura y un workflow de plan ECS mediante OIDC. Las ejecuciones remotas quedan por acreditar.
+
+**Referencia visual:** CI/CD, en el atlas vectorial.
+
 ### MVP de 4-6 semanas
 
 | Semana | Entrega | Dependencia / aceptación |
@@ -401,8 +467,8 @@ Los umbrales son iniciales y requieren ajuste con tráfico real. Se usan ventana
 | 1 | Contratos, ADR, modelo de propiedad, OIDC y esqueleto CI | Cliente valida Q1-Q8; token inválido y acceso cruzado rechazados. |
 | 2 | Proyecciones catálogo/stock/precio y adaptadores iniciales | Contratos de ERP/WMS; frescura y límites visibles. |
 | 3 | Orden idempotente, reserva y saga de pago sandbox | Reintentos concurrentes crean una sola orden; compensación reproducible. |
-| 4 | Outbox, webhooks, auditoría, dashboard y runbooks | Reinicio de worker no pierde intención; reentrega no duplica efecto. |
-| 5 | Carga, seguridad y recuperación; infraestructura staging | Resultados publicados, restauración probada, costos aprobados. |
+| 4 | Outbox, webhooks, auditoría, dashboard y ayuda contextual | Reentrega sin duplicar efectos. Guías alineadas con roles y procedimientos del piloto. |
+| 5 | Seguridad, carga, recuperación y staging | Revisar costos ECS, probar IAM, restauración, rollback y redrive en el entorno autorizado. |
 | 6 | Piloto por partner y soporte de operación | Checklist de salida, observación y rollback acordados. |
 
 Incluye un canal principal, una integración por sistema prioritario, un proveedor de pagos en sandbox, administración básica y operación observable. Excluye multirregión, reglas fiscales internacionales, motor promocional completo, conectores ilimitados, recomendación con IA y promesas de cero indisponibilidad. Entregables: código, contratos, pipelines, infraestructura, diagramas, evidencia de pruebas y guía operativa. La salida a producción depende de aprobación de negocio, seguridad y operación, además de una compilación exitosa.

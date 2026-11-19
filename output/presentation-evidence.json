@@ -1,0 +1,11 @@
+{
+  "reviewDate": "2026-11-17",
+  "evidenceScope": "Resultados informados por la ejecución principal. Detalles y comandos en el informe de cierre.",
+  "results": [
+    ["Backend", "260 controles aprobados", "En proceso / transportes controlados"],
+    ["Frontend", "22/22 unitarias", "Build, lint y manuales aprobados"],
+    ["Interfaz aislada", "20 aprobadas / 2 omitidas", "Datos sintéticos. Escritorio y móvil"],
+    ["Plataforma integral", "Bloqueada", "Socket 10013. Sin E2E real"],
+    ["AWS", "No desplegado", "Sin presupuesto aprobado"]
+  ]
+}

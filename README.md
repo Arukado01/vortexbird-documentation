@@ -1,31 +1,32 @@
-# VortexBird - documentación
+# VortexBird - documentación de entrega
 
-Repositorio independiente de documentación para la plataforma de interoperabilidad de AndesRetail.
+Revisión integral del 17-Nov-2026. **Validación parcial: servicios conectados y AWS pendientes.**
 
-- `vortexbird-architecture-assessment.md`: documento principal en los nueve apartados exigidos.
-- `output/pdf/vortexbird-architecture-assessment.pdf`: versión maquetada del assessment.
-- `diagrams/`: diez diagramas editables Mermaid y representaciones para el PDF.
-- `adr/`: decisiones, alternativas y consecuencias.
-- `presentation-guide.md`: recorrido de demo, preguntas y defensa de decisiones.
-- `implementation-status.md`: estado observado y límites de verificación.
-- `acceptance-checklist.md`: cada criterio del texto pegado, su estado y evidencia.
-- El assessment distingue simulador predeterminado, checkout sandbox y SQS implementados con pruebas controladas, cuotas PostgreSQL compartidas y las ejecuciones externas todavía pendientes.
-- `scripts/build_pdf.py`: construcción reproducible del PDF con ReportLab.
-- `scripts/validate_docs.py`: comprobación estructural de entregables.
+| Archivo | Uso |
+| --- | --- |
+| `implementation-status.md` | Estado vigente, evidencia y límites |
+| `audit-matrix.md` | Componente, defecto, acción y prueba |
+| `acceptance-checklist.md` | Criterios por fase del nuevo encargo |
+| `closure-report.md` | Comandos, resultados y pendientes concretos |
+| `operation-runbook.md` | Arranque, detención, diagnóstico y reanudación |
+| `manual-inventory.md` | Once guías vivas y versiones actuales |
+| `vortexbird-architecture-assessment.md` | Assessment técnico completo de nueve secciones |
+| `output/pdf/vortexbird-architecture-assessment.pdf` | PDF rediseñado con índice y atlas vectorial |
+| `output/presentation/VortexBird_AndesRetail_Executive.pptx` | Presentación ejecutiva con notas |
+| `diagrams/vector/` | Catorce SVG y manifiesto |
+| `execution-evidence.json` | Datos de resultados y capturas para los artefactos |
+| `history/` | Evidencia anterior, conservada con fecha |
 
-## Validación
+## Generación reproducible
 
-Documento de nueve secciones, PDF de 20 páginas revisado visualmente, diez diagramas y ocho ADR. La corrida integral aprobó 268 controles de aplicación/frontend; SQL45 e infraestructura34+6 se registran por separado. Consultar `implementation-status.md` y `../qa/verification-summary.json` para alcances y limitaciones.
+Python 3.12 con ReportLab, pypdf y Pillow:
 
 ```powershell
+python scripts/vector_atlas.py
+python scripts/build_professional_pdf.py
 python scripts/validate_docs.py
-python scripts/build_pdf.py
 ```
 
-Dependencias de generación: Python 3.12+, reportlab, Pillow y pypdf. Renderizar el PDF con Poppler (`pdftoppm -png`) y revisar las páginas antes de publicar. La compilación del PDF no valida por sí sola el contenido arquitectónico.
+Usar `scripts/build_presentation.mjs` y el runtime de `@oai/artifact-tool` para el PowerPoint. Las rutas específicas del runtime pueden variar por instalación. Renderizar salidas y revisar texto, tamaños, tablas y diagramas antes de entregar.
 
-## Convenciones y mantenimiento
-
-Ramas `main`, `develop`, `feature/*`, `fix/*` y `hotfix/*`. Conventional Commits: `docs:`, `fix:`, `chore:`. Una decisión importante añade o reemplaza un ADR conservando historia; el código y las pruebas mandan sobre la documentación de estado. Todo PR debe revisar contratos, diagramas, límites operativos y evidencia afectada.
-
-La documentación pertenece a este repositorio; no contiene secretos ni credenciales. Los recursos AWS son objetivos o IaC preparada, no evidencia de despliegue. Ver los README hermanos de backend, frontend e infraestructura para ejecución.
+Los diagramas vectoriales son la edición actual. Mermaid y PNG anteriores se conservan como fuentes históricas auxiliares; su cantidad no acredita el nuevo alcance. ECS Fargate es el destino inicial y EKS una alternativa. Ningún artefacto presenta una simulación como integración real ni un diseño AWS como despliegue.

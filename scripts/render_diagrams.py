@@ -99,18 +99,21 @@ def sequence(filename,title,participants,steps,note):
         d.text((45,height-95+j*25),line,font=font(19),fill="#687E8D")
     im.save(OUT/filename)
 
-diagram("01-architecture.png","01 / Arquitectura general","Simuladores locales; sandbox opcional sin sesión externa verificada",[
- ("portal","Portal React",100,190),("channels","E-commerce / marketplaces",580,190),("identity","Keycloak / OIDC",1060,380),
- ("api","API: contratos, permisos, cuotas",580,380),("cache","Redis: consultas",100,380),
- ("core","Application / Domain / saga",580,570),("db","PostgreSQL: estado, outbox, cuotas",100,760),
- ("adapters","Adaptadores simulados",1060,570),("worker","Workers: eventos y reintentos",580,760),("payments","Checkout sandbox opcional",1060,760)],
- [("portal","api"),("channels","api"),("identity","api"),("identity","portal"),("api","cache"),("api","core"),("core","db"),("core","adapters"),("db","worker"),("worker","adapters"),("worker","payments")],1000)
+diagram("01-architecture.png","01 / Arquitectura general","ECS Fargate es el destino inicial. Adaptadores de negocio de demostración.",[
+ ("browser","Portal y canales",580,180),("edge","ALB HTTPS",580,350),("identity","Keycloak externo OIDC",1060,350),
+ ("web","Frontend ECS",100,530),("api","API .NET en ECS",580,530),("cache","Redis TLS opcional",1060,530),
+ ("db","PostgreSQL y outbox",580,710),("worker","Worker ECS",580,880),("sqs","SQS Standard y DLQ",100,880),
+ ("adapters","Adaptadores simulados y sandbox",1060,880)],
+ [("browser","edge"),("edge","web"),("edge","api"),("identity","api"),("identity","web"),("api","cache"),
+  ("api","db"),("db","worker"),("worker","sqs"),("worker","adapters")],1060)
 
-diagram("02-aws-deployment.png","02 / Despliegue AWS objetivo","Backend: Pod Identity; Keycloak/CNI: IRSA. Infraestructura no desplegada",[
- ("edge","DNS y TLS propios",580,180),("waf","WAF / ALB",580,360),("kong","Kong en EKS",580,540),
- ("pods","API / frontend / workers",580,720),("db","RDS privado",100,910),("redis","ElastiCache privado",580,910),("sqs","SQS / DLQ",1060,910),
- ("secret","Secrets / Pod Identity backend",100,720),("obs","CloudWatch / trazas",1060,720)],
- [("edge","waf"),("waf","kong"),("kong","pods"),("pods","db"),("pods","redis"),("pods","sqs"),("pods","secret"),("pods","obs")],1150)
+diagram("02-aws-deployment.png","02 / Despliegue ECS Fargate","Terraform definido. Las tareas se ubican en subredes privadas.",[
+ ("dns","DNS y ACM externos",580,175),("alb","ALB en subredes públicas",580,340),
+ ("web","Frontend Fargate",100,515),("api","API Fargate",580,515),("worker","Worker Fargate",1060,515),
+ ("cache","Redis TLS opcional",100,700),("rds","RDS PostgreSQL privado",580,700),("sqs","SQS Standard y DLQ",1060,700),
+ ("ops","ECR, CloudWatch y Secrets Manager",1060,175)],
+ [("dns","alb"),("alb","web"),("alb","api"),("api","rds"),("worker","rds"),("api","cache"),
+  ("worker","sqs"),("ops","api"),("ops","worker")],880)
 
 diagram("03-components.png","03 / Dependencias de componentes","Las flechas representan dependencias de código",[
  ("api","API: endpoints / auth",100,200),("infra","Infrastructure: EF / adapters",1060,200),
@@ -124,8 +127,8 @@ diagram("04-adapters.png","04 / Integración y capa anticorrupción","Sistemas e
 
 sequence("05-create-order.png","05 / Crear una orden",["Canal","API / handler","DB / adapters locales","Worker"],[
  (0,1,"Token, clave y contenido"),(1,2,"Lock de idempotencia"),(1,2,"CRM / precio ERP / reserva WMS"),(1,2,"Commit orden y outbox"),
- (1,0,"202 reserved y recibo"),(3,2,"Reclamar evento con lease"),(3,2,"Saga de pago simulado"),(3,2,"Confirmar o compensar"),(0,1,"Consultar orden"),(1,2,"Leer estado e historial"),(1,0,"Estado actualizado")],
- "IPaymentGateway fuera de transacción: simulador por defecto, sandbox opcional. No hay ERP/WMS/OMS/CRM reales conectados.")
+ (1,0,"202 reserved y recibo"),(3,2,"Reclamar evento con lease"),(3,2,"Iniciar proveedor configurado"),(3,2,"Confirmar o compensar"),(0,1,"Consultar orden"),(1,2,"Leer estado e historial"),(1,0,"Estado actualizado")],
+ "Contrato público sin datos de simulación. Las rutas de prueba solo se registran en Development con Simulator.")
 
 sequence("06-payments.png","06 / Checkout sandbox y conciliación",["Workers","Mercado Pago sandbox","API","PostgreSQL","Portal"],[
  (0,3,"Intención durable antes del POST"),(0,1,"Verificar test_user y crear preferencia"),(1,0,"URL o respuesta incierta"),(0,3,"Persistir pending / unknown"),
@@ -145,8 +148,8 @@ diagram("08-saga.png","08 / Saga y compensaciones","Estados del incremento local
  [("pending","reserved"),("pending","failed"),("reserved","awaiting"),("reserved","comp"),("awaiting","comp"),("awaiting","confirmed"),
  ("comp","cancelled"),("comp","failed"),("confirmed","comp"),("confirmed","shipped"),("shipped","delivered")],1100)
 
-diagram("09-events.png","09 / Outbox, consumo y excepciones","Local o SQS opcional implementados; sin ejecución AWS/ElasticMQ verificada",[
- ("tx","Commit: orden + outbox",100,190),("pub","Publicador con lease",580,190),("queue","Local o SQS opcional",1060,190),
+diagram("09-events.png","09 / Outbox, consumo y excepciones","AmazonSQSClient con HTTP controlado y ElasticMQ. AWS real pendiente.",[
+ ("tx","Commit: orden + outbox",100,190),("pub","Publicador con lease",580,190),("queue","AmazonSQSClient / SQS Standard",1060,190),
  ("complete","Finalización durable",100,420),("handler","Handler idempotente",580,420),("inbox","Inbox: origen, hash, lease",1060,420),
  ("ack","Acuse / DeleteMessage",100,680),("retry","Backoff / visibilidad",580,680),("dlq","DLQ / estado de excepción",1060,680),
  ("fix","Corrección y redrive",1060,900)],
@@ -157,4 +160,32 @@ diagram("10-data-model.png","10 / Modelo relacional lógico","Relaciones princip
  ("idem","IdempotencyRecord",100,420),("payment","Payment / Checkout / Receipt / Reservation",580,420),("outbox","Outbox / MessagingInbox / PaymentInbox",1060,420),
  ("user","User / UserRole",100,680),("role","Role / RolePermission",580,680),("perm","Permission",1060,680)],
  [("partner","order"),("partner","idem"),("order","product"),("order","payment"),("order","outbox"),("user","role"),("role","perm")],920)
+diagram("11-help-center.png","11 / Centro de ayuda público","Las once guías, preguntas frecuentes e impresión son públicas.",[
+ ("access","Login, registro y recuperación",100,180),("workspace","Ayuda contextual",580,180),
+ ("sources","Guías JSON y capturas",1060,180),("help","Catálogo público y búsqueda",580,360),
+ ("reader","Procedimientos y preguntas frecuentes",580,540),("pdf","Impresión A4",100,720),
+ ("actions","Operación autenticada del workspace",1060,720)],
+ [("access","help"),("workspace","help"),("sources","help"),("help","reader"),("reader","pdf"),("reader","actions")],890)
+
+diagram("12-ecs-iam.png","12 / Identidad e IAM de ECS","Credenciales temporales por tarea. Sin claves AWS en imágenes.",[
+ ("ecs","Principal ECS Tasks",580,170),("exec","Execution Role por servicio",100,360),
+ ("app","Task Role por servicio",1060,360),("boot","ECR, logs y secreto propio",100,560),
+ ("worker","Worker: cola de eventos",1060,560),("other","API y frontend sin acceso SQS",580,560),
+ ("operator","Operador independiente",100,750),("dlq","Revisión y redrive de DLQ",580,750)],
+ [("ecs","exec"),("ecs","app"),("exec","boot"),("app","worker"),("app","other"),("operator","dlq")],940)
+
+diagram("13-living-documentation.png","13 / Documentación viva","Reglas de revisión documental en el pull request.",[
+ ("change","Cambio funcional",580,175),("impact","Revisar impacto documental",580,350),
+ ("update","Guía, versión, historial y capturas",100,535),("reason","Registrar motivo sin impacto",1060,535),
+ ("verify","Validar enlaces y flujo",580,710),("ci","Controles del pull request",580,880)],
+ [("change","impact"),("impact","update"),("impact","reason"),("update","verify"),("reason","verify"),("verify","ci")],1050)
+
+diagram("14-cicd.png","14 / Integración y entrega","CI configurada. Plan AWS y despliegue requieren su entorno.",[
+ ("pr","Pull request",580,170),("build","Build, pruebas y documentación",100,350),
+ ("iac","HCL y planes simulados",1060,350),("images","Imágenes ECR por digest",100,530),
+ ("plan","Plan ECS mediante OIDC",580,530),("review","Revisar plan y costo",580,700),
+ ("deploy","Despliegue autorizado",580,870),("checks","Health y rollback",1060,870)],
+ [("pr","build"),("pr","iac"),("build","images"),("iac","plan"),("images","plan"),
+  ("plan","review"),("review","deploy"),("deploy","checks")],1040)
+
 print(f"Rendered {len(list(OUT.glob('*.png')))} diagrams")
