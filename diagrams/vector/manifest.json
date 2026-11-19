@@ -1,0 +1,100 @@
+[
+  {
+    "number": 1,
+    "title": "Arquitectura general",
+    "status": "Implementación modular. Sistemas empresariales de demostración.",
+    "caption": "Los límites del dominio no dependen de proveedores externos. La validación integral conectada permanece bloqueada en esta ejecución.",
+    "file": "01-vortexbird.svg"
+  },
+  {
+    "number": 2,
+    "title": "Arquitectura AWS",
+    "status": "Objetivo ECS Fargate. No existen recursos desplegados acreditados.",
+    "caption": "La cuenta, el plan real, TLS, identidad y presupuesto deben verificarse antes de provisionar. El diagrama expresa el destino de la IaC.",
+    "file": "02-vortexbird.svg"
+  },
+  {
+    "number": 3,
+    "title": "Autenticación y autorización",
+    "status": "Código OIDC presente. Sesión real Keycloak pendiente de validación.",
+    "caption": "El backend valida firma, emisor, audiencia, vigencia y alcance. El login de demostración solo corresponde a Development.",
+    "file": "03-vortexbird.svg"
+  },
+  {
+    "number": 4,
+    "title": "Integraciones empresariales",
+    "status": "Puertos implementados. Los adaptadores empresariales son simuladores.",
+    "caption": "Conectar un sistema real requiere credenciales, contrato, idempotencia y ensayo de sus fallos. Un simulador no acredita una integración productiva.",
+    "file": "04-vortexbird.svg"
+  },
+  {
+    "number": 5,
+    "title": "Pedidos y reservas",
+    "status": "Secuencia del código. Persistencia conectada no revalidada en esta corrida.",
+    "caption": "Repetir el mismo contenido conserva la orden. Reutilizar la clave con un contenido distinto produce conflicto.",
+    "file": "05-vortexbird.svg"
+  },
+  {
+    "number": 6,
+    "title": "Pagos y conciliación",
+    "status": "Simulador predeterminado. Mercado Pago sandbox externo no verificado.",
+    "caption": "El importe, moneda, vendedor y referencia se comprueban contra el proveedor. El regreso del navegador no confirma pagos.",
+    "file": "06-vortexbird.svg"
+  },
+  {
+    "number": 7,
+    "title": "Saga y compensaciones",
+    "status": "Estados de la aplicación con efectos recuperables.",
+    "caption": "Las transacciones SQL no abarcan proveedores. Cada compensación debe poder repetirse de forma segura y conservar su evidencia.",
+    "file": "07-vortexbird.svg"
+  },
+  {
+    "number": 8,
+    "title": "Outbox e Inbox",
+    "status": "Persistencia local y deduplicación. Entrega al menos una vez.",
+    "caption": "Un fallo después del efecto y antes de marcar la inbox puede repetir el handler. La idempotencia protege ese intervalo.",
+    "file": "08-vortexbird.svg"
+  },
+  {
+    "number": 9,
+    "title": "Mensajería SQS y DLQ",
+    "status": "SDK oficial implementado. IAM y redrive AWS no probados.",
+    "caption": "ElasticMQ y respuestas HTTP controladas verifican partes del protocolo. El redrive administrado de AWS requiere cuenta y permisos reales.",
+    "file": "09-vortexbird.svg"
+  },
+  {
+    "number": 10,
+    "title": "Seguridad e IAM",
+    "status": "Separación de responsabilidades declarada para ECS.",
+    "caption": "No hay claves AWS dentro de las imágenes. La configuración declarada no reemplaza una prueba de permisos efectivos en staging.",
+    "file": "10-vortexbird.svg"
+  },
+  {
+    "number": 11,
+    "title": "Observabilidad",
+    "status": "Instrumentación nativa disponible. Exportación y alertas son objetivo.",
+    "caption": "No se acredita disponibilidad 99,9 % ni p95 inferior a 300 ms. Los SLO necesitan tráfico representativo y observación temporal.",
+    "file": "11-vortexbird.svg"
+  },
+  {
+    "number": 12,
+    "title": "CI/CD",
+    "status": "Workflows configurados. Ejecución remota y despliegue sin acreditar.",
+    "caption": "Las comprobaciones locales ayudan a revisar los workflows. Solo una ejecución remota y sus endpoints demuestran el despliegue.",
+    "file": "12-vortexbird.svg"
+  },
+  {
+    "number": 13,
+    "title": "Centro de documentación viva",
+    "status": "Once guías públicas y ayuda contextual para 18 rutas.",
+    "caption": "Los permisos de operación no restringen la lectura general de los manuales. El control de acceso se ejecuta en la API.",
+    "file": "13-vortexbird.svg"
+  },
+  {
+    "number": 14,
+    "title": "Proceso de despliegue",
+    "status": "Puerta actual cerrada: validación integral local y presupuesto pendientes.",
+    "caption": "El entorno actual rechaza conexiones de loopback con socket 10013. No se alteran permisos del sistema ni se omite esta puerta.",
+    "file": "14-vortexbird.svg"
+  }
+]

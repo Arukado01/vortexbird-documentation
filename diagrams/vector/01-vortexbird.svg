@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="1120" height="650" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1120 650" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="1120" height="650"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-650)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="0" width="1120" height="650" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="32" y="608" style="font-family: Helvetica-Bold; font-size: 20px;fill: rgb(3%,49%,54%); stroke:none;" transform="translate(0,1216) scale(1,-1)">01</text>
+			<text x="88" y="608" style="font-family: Helvetica-Bold; font-size: 25px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,1216) scale(1,-1)">Arquitectura general</text>
+			<text x="32" y="574" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,1148) scale(1,-1)">Implementación modular. Sistemas empresariales de demostración.</text>
+			<path d="M 32,554 L 1088,554 Z" style="stroke: rgb(80%,86%,90%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="32" y="22" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,44) scale(1,-1)">VORTEXBIRD / ANDESRETAIL</text>
+			<text x="420" y="22" style="font-family: Helvetica; font-size: 10px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,44) scale(1,-1)">Verde: aplicación   Azul: datos   Ámbar: externo   Gris: objetivo cloud</text>
+			<path d="M 262,478 L 582,478 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="582 478, 573.896 481.9147, 573.896 474.0853" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<rect x="384.095" y="482.0" width="75.81" height="14.0" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="388.095" y="485.0" style="font-family: Helvetica; font-size: 10px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,970) scale(1,-1)">API versionada</text>
+			<path d="M 537,478 L 582,478 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="582 478, 573.896 481.9147, 573.896 474.0853" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<rect x="539.11" y="482.0" width="40.77999999999997" height="14.0" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="543.11" y="485.0" style="font-family: Helvetica; font-size: 10px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,970) scale(1,-1)">HTTPS</text>
+			<path d="M 857,478 L 812,478 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="812 478, 820.104 474.0853, 820.104 481.9147" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<rect x="820.225" y="482.0" width="28.549999999999955" height="14.0" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="824.225" y="485.0" style="font-family: Helvetica; font-size: 10px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,970) scale(1,-1)">JWT</text>
+			<path d="M 697,433 L 697,353 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="697 353, 700.9147 361.104, 693.0853 361.104" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<rect x="665.77" y="397.0" width="62.460000000000036" height="14.0" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="669.77" y="400.0" style="font-family: Helvetica; font-size: 10px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,800) scale(1,-1)">Persistencia</text>
+			<path d="M 697,433 L 697,393 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<path d="M 697,393 L 972,393 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<path d="M 972,393 L 972,353 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="972 353, 975.9147 361.104, 968.0853 361.104" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<rect x="813.825" y="397.0" width="41.35000000000002" height="14.0" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="817.825" y="400.0" style="font-family: Helvetica; font-size: 10px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,800) scale(1,-1)">Lectura</text>
+			<path d="M 537,308 L 582,308 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="582 308, 573.896 311.9147, 573.896 304.0853" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<rect x="521.87" y="312.0" width="75.25999999999999" height="14.0" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="525.87" y="315.0" style="font-family: Helvetica; font-size: 10px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,630) scale(1,-1)">Estado durable</text>
+			<path d="M 307,308 L 262,308 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="262 308, 270.104 304.0853, 270.104 311.9147" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<rect x="263.27" y="312.0" width="42.45999999999998" height="14.0" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="267.27" y="315.0" style="font-family: Helvetica; font-size: 10px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,630) scale(1,-1)">Puertos</text>
+			<path d="M 422,263 L 422,183 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="422 183, 425.9147 191.104, 418.0853 191.104" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<rect x="400.49" y="227.0" width="43.01999999999998" height="14.0" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="404.49" y="230.0" style="font-family: Helvetica; font-size: 10px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,460) scale(1,-1)">Entrega</text>
+			<rect x="32" y="433" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="32" y="437" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(67%,39%,0%); fill-rule: evenodd;"/>
+			<text x="46" y="497" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,994) scale(1,-1)">Canales comerciales</text>
+			<text x="46" y="460" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,920) scale(1,-1)">E-commerce y marketplaces</text>
+			<rect x="307" y="433" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="307" y="437" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(3%,49%,54%); fill-rule: evenodd;"/>
+			<text x="321" y="497" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,994) scale(1,-1)">Portal React</text>
+			<text x="321" y="460" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,920) scale(1,-1)">Operación y ayuda pública</text>
+			<rect x="582" y="433" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="582" y="437" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(3%,49%,54%); fill-rule: evenodd;"/>
+			<text x="596" y="497" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,994) scale(1,-1)">API .NET 10</text>
+			<text x="596" y="460" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,920) scale(1,-1)">Contratos y permisos</text>
+			<rect x="857" y="433" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="857" y="437" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(67%,39%,0%); fill-rule: evenodd;"/>
+			<text x="871" y="497" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,994) scale(1,-1)">Keycloak</text>
+			<text x="871" y="460" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,920) scale(1,-1)">OIDC / PKCE</text>
+			<rect x="32" y="263" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="32" y="267" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(67%,39%,0%); fill-rule: evenodd;"/>
+			<text x="46" y="327" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,654) scale(1,-1)">Adaptadores</text>
+			<text x="46" y="290" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,580) scale(1,-1)">ERP, WMS, OMS y CRM</text>
+			<text x="46" y="275" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,550) scale(1,-1)">simulados</text>
+			<rect x="307" y="263" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="307" y="267" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(3%,49%,54%); fill-rule: evenodd;"/>
+			<text x="321" y="327" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,654) scale(1,-1)">Worker</text>
+			<text x="321" y="290" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,580) scale(1,-1)">Saga y tareas recuperables</text>
+			<rect x="582" y="263" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="582" y="267" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(14%,38%,65%); fill-rule: evenodd;"/>
+			<text x="596" y="327" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,654) scale(1,-1)">PostgreSQL</text>
+			<text x="596" y="290" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,580) scale(1,-1)">Órdenes, outbox e inbox</text>
+			<rect x="857" y="263" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="857" y="267" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(14%,38%,65%); fill-rule: evenodd;"/>
+			<text x="871" y="327" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,654) scale(1,-1)">Redis opcional</text>
+			<text x="871" y="290" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,580) scale(1,-1)">Caché; no fuente de verdad</text>
+			<rect x="307" y="93" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="307" y="97" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<text x="321" y="157" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,314) scale(1,-1)">Mensajería</text>
+			<text x="321" y="120" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,240) scale(1,-1)">Local / ElasticMQ / SQS</text>
+		</g>
+	</g>
+</svg>

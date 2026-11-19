@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="1120" height="650" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1120 650" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="1120" height="650"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-650)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="0" width="1120" height="650" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="32" y="608" style="font-family: Helvetica-Bold; font-size: 20px;fill: rgb(3%,49%,54%); stroke:none;" transform="translate(0,1216) scale(1,-1)">12</text>
+			<text x="88" y="608" style="font-family: Helvetica-Bold; font-size: 25px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,1216) scale(1,-1)">CI/CD</text>
+			<text x="32" y="574" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,1148) scale(1,-1)">Workflows configurados. Ejecución remota y despliegue sin acreditar.</text>
+			<path d="M 32,554 L 1088,554 Z" style="stroke: rgb(80%,86%,90%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="32" y="22" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,44) scale(1,-1)">VORTEXBIRD / ANDESRETAIL</text>
+			<text x="420" y="22" style="font-family: Helvetica; font-size: 10px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,44) scale(1,-1)">Verde: aplicación   Azul: datos   Ámbar: externo   Gris: objetivo cloud</text>
+			<path d="M 262,478 L 307,478 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="307 478, 298.896 481.9147, 298.896 474.0853" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<path d="M 537,478 L 582,478 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="582 478, 573.896 481.9147, 573.896 474.0853" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<path d="M 812,478 L 857,478 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="857 478, 848.896 481.9147, 848.896 474.0853" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<path d="M 972,433 L 972,353 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="972 353, 975.9147 361.104, 968.0853 361.104" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<path d="M 857,308 L 812,308 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="812 308, 820.104 304.0853, 820.104 311.9147" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<path d="M 582,308 L 537,308 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="537 308, 545.104 304.0853, 545.104 311.9147" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<path d="M 307,308 L 262,308 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="262 308, 270.104 304.0853, 270.104 311.9147" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<path d="M 147,263 L 147,183 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="147 183, 150.9147 191.104, 143.0853 191.104" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<rect x="127.995" y="227.0" width="38.00999999999999" height="14.0" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="131.995" y="230.0" style="font-family: Helvetica; font-size: 10px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,460) scale(1,-1)">Si falla</text>
+			<rect x="32" y="433" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="32" y="437" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(3%,49%,54%); fill-rule: evenodd;"/>
+			<text x="46" y="497" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,994) scale(1,-1)">Pull request</text>
+			<text x="46" y="460" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,920) scale(1,-1)">Código y documentación</text>
+			<rect x="307" y="433" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="307" y="437" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(3%,49%,54%); fill-rule: evenodd;"/>
+			<text x="321" y="497" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,994) scale(1,-1)">Build y pruebas</text>
+			<text x="321" y="460" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,920) scale(1,-1)">Backend, frontend y seguridad</text>
+			<rect x="582" y="433" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="582" y="437" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<text x="596" y="497" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,994) scale(1,-1)">Imagen inmutable</text>
+			<text x="596" y="460" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,920) scale(1,-1)">ECR por digest</text>
+			<rect x="857" y="433" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="857" y="437" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<text x="871" y="497" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,994) scale(1,-1)">Plan Terraform real</text>
+			<text x="871" y="460" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,920) scale(1,-1)">Cuenta y estado remoto</text>
+			<rect x="32" y="263" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="32" y="267" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<text x="46" y="327" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,654) scale(1,-1)">Smoke y salud</text>
+			<text x="46" y="290" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,580) scale(1,-1)">Frontend, API y worker</text>
+			<rect x="307" y="263" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="307" y="267" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<text x="321" y="327" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,654) scale(1,-1)">Actualizar ECS</text>
+			<text x="321" y="290" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,580) scale(1,-1)">Espera de estabilidad</text>
+			<rect x="582" y="263" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="582" y="267" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<text x="596" y="327" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,654) scale(1,-1)">Migración controlada</text>
+			<text x="596" y="290" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,580) scale(1,-1)">Expand / contract</text>
+			<rect x="857" y="263" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="857" y="267" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(67%,39%,0%); fill-rule: evenodd;"/>
+			<text x="871" y="327" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,654) scale(1,-1)">Puerta de aprobación</text>
+			<text x="871" y="290" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,580) scale(1,-1)">Costos, permisos y revisión</text>
+			<rect x="32" y="93" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="32" y="97" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<text x="46" y="157" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,314) scale(1,-1)">Rollback</text>
+			<text x="46" y="120" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,240) scale(1,-1)">Digest anterior y diagnóstico</text>
+		</g>
+	</g>
+</svg>

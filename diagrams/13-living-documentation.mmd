@@ -1,0 +1,7 @@
+flowchart TD
+  change["Cambio funcional"] --> review["Revisar impacto"]
+  review --> update["Guía, versión, historial y capturas"]
+  review --> reason["Registrar motivo sin impacto"]
+  update --> verify["Validar enlaces y flujo en navegador"]
+  reason --> verify
+  verify --> gate["Controles del pull request"]

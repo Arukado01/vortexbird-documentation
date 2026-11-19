@@ -1,0 +1,7 @@
+flowchart TD
+  public["Login, registro y recuperación"] --> help["Centro de ayuda público"]
+  workspace["Barra y ayuda contextual"] --> help
+  json["Once guías JSON y capturas"] --> help
+  help --> reader["Procedimientos y preguntas frecuentes"]
+  reader --> pdf["Impresión A4"]
+  reader --> guard["Operación del workspace autorizada"]

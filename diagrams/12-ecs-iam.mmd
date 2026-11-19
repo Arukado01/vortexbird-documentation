@@ -1,0 +1,8 @@
+flowchart TD
+  service["Principal ECS Tasks"] --> execution["Execution Role por servicio"]
+  service --> app["Task Role por servicio"]
+  execution --> start["ECR y CloudWatch Logs"]
+  execution --> secrets["Secreto propio de API o worker"]
+  app --> worker["Worker: SQS de eventos"]
+  app --> other["API y frontend: sin políticas de SQS"]
+  operator["Rol de operación independiente"] --> dlq["Revisión y redrive de DLQ"]

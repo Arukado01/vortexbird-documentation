@@ -1,11 +1,10 @@
 flowchart TD
-  edge["Objetivo AWS: DNS y TLS propios"] --> waf["WAF y ALB"]
-  waf --> kong["Kong: subredes de aplicación"]
-  kong --> pods["EKS: frontend, API y workers"]
-  pods --> rds["RDS PostgreSQL privado"]
-  pods --> redis["ElastiCache privado"]
-  pods --> sqs["SQS y DLQ"]
-  pods --> secrets["Secrets Manager / Pod Identity backend"]
-  pods --> metrics["CloudWatch y trazas"]
-  note["IaC preparada: no desplegado"] -.-> pods
-  identity["Keycloak y CNI: IRSA"] -.-> pods
+  viewer["DNS y ACM externos"] --> alb["ALB en subredes públicas"]
+  alb --> frontend["Frontend Fargate privado"]
+  alb --> api["API Fargate privada"]
+  worker["Worker Fargate privado"] --> sqs["SQS Standard y DLQ"]
+  api --> db["RDS PostgreSQL privado"]
+  worker --> db
+  api --> redis["Redis TLS opcional"]
+  frontops["ECR, CloudWatch y Secrets Manager"] --> api
+  frontops --> worker

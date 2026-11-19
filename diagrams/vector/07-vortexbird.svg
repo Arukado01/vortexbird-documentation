@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="1120" height="650" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1120 650" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="1120" height="650"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-650)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="0" width="1120" height="650" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="32" y="608" style="font-family: Helvetica-Bold; font-size: 20px;fill: rgb(3%,49%,54%); stroke:none;" transform="translate(0,1216) scale(1,-1)">07</text>
+			<text x="88" y="608" style="font-family: Helvetica-Bold; font-size: 25px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,1216) scale(1,-1)">Saga y compensaciones</text>
+			<text x="32" y="574" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,1148) scale(1,-1)">Estados de la aplicación con efectos recuperables.</text>
+			<path d="M 32,554 L 1088,554 Z" style="stroke: rgb(80%,86%,90%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="32" y="22" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,44) scale(1,-1)">VORTEXBIRD / ANDESRETAIL</text>
+			<text x="420" y="22" style="font-family: Helvetica; font-size: 10px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,44) scale(1,-1)">Verde: aplicación   Azul: datos   Ámbar: externo   Gris: objetivo cloud</text>
+			<path d="M 262,478 L 307,478 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="307 478, 298.896 481.9147, 298.896 474.0853" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<path d="M 537,478 L 582,478 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="582 478, 573.896 481.9147, 573.896 474.0853" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<path d="M 812,478 L 857,478 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="857 478, 848.896 481.9147, 848.896 474.0853" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<rect x="808.82" y="482.0" width="51.360000000000014" height="14.0" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="812.82" y="485.0" style="font-family: Helvetica; font-size: 10px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,970) scale(1,-1)">Aprobado</text>
+			<path d="M 147,433 L 147,353 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="147 353, 150.9147 361.104, 143.0853 361.104" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<rect x="125.77000000000001" y="397.0" width="42.46000000000001" height="14.0" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="129.77" y="400.0" style="font-family: Helvetica; font-size: 10px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,800) scale(1,-1)">Inválido</text>
+			<path d="M 422,433 L 422,353 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="422 353, 425.9147 361.104, 418.0853 361.104" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<rect x="407.165" y="397.0" width="29.670000000000016" height="14.0" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="411.165" y="400.0" style="font-family: Helvetica; font-size: 10px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,800) scale(1,-1)">Fallo</text>
+			<path d="M 697,433 L 697,393 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<path d="M 697,393 L 422,393 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<path d="M 422,393 L 422,353 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="422 353, 425.9147 361.104, 418.0853 361.104" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<rect x="535.77" y="397.0" width="47.460000000000036" height="14.0" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="539.77" y="400.0" style="font-family: Helvetica; font-size: 10px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,800) scale(1,-1)">Rechazo</text>
+			<path d="M 537,308 L 582,308 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="582 308, 573.896 311.9147, 573.896 304.0853" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<path d="M 972,433 L 972,353 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="972 353, 975.9147 361.104, 968.0853 361.104" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<path d="M 972,263 L 972,183 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="972 183, 975.9147 191.104, 968.0853 191.104" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<rect x="32" y="433" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="32" y="437" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(3%,49%,54%); fill-rule: evenodd;"/>
+			<text x="46" y="497" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,994) scale(1,-1)">Solicitud</text>
+			<text x="46" y="460" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,920) scale(1,-1)">Validación del pedido</text>
+			<rect x="307" y="433" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="307" y="437" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(3%,49%,54%); fill-rule: evenodd;"/>
+			<text x="321" y="497" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,994) scale(1,-1)">Reservado</text>
+			<text x="321" y="460" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,920) scale(1,-1)">Stock comprometido</text>
+			<rect x="582" y="433" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="582" y="437" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(3%,49%,54%); fill-rule: evenodd;"/>
+			<text x="596" y="497" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,994) scale(1,-1)">Esperando pago</text>
+			<text x="596" y="460" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,920) scale(1,-1)">Pendiente o incierto</text>
+			<rect x="857" y="433" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="857" y="437" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(3%,49%,54%); fill-rule: evenodd;"/>
+			<text x="871" y="497" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,994) scale(1,-1)">Confirmado</text>
+			<text x="871" y="460" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,920) scale(1,-1)">Pago y reserva válidos</text>
+			<rect x="32" y="263" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="32" y="267" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(67%,39%,0%); fill-rule: evenodd;"/>
+			<text x="46" y="327" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,654) scale(1,-1)">Fallo de validación</text>
+			<text x="46" y="290" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,580) scale(1,-1)">No iniciar cobro</text>
+			<rect x="307" y="263" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="307" y="267" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(67%,39%,0%); fill-rule: evenodd;"/>
+			<text x="321" y="327" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,654) scale(1,-1)">Compensación</text>
+			<text x="321" y="290" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,580) scale(1,-1)">Liberar / conciliar reembolso</text>
+			<rect x="582" y="263" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="582" y="267" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(3%,49%,54%); fill-rule: evenodd;"/>
+			<text x="596" y="327" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,654) scale(1,-1)">Cancelado</text>
+			<text x="596" y="290" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,580) scale(1,-1)">Efectos compensados</text>
+			<rect x="857" y="263" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="857" y="267" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(3%,49%,54%); fill-rule: evenodd;"/>
+			<text x="871" y="327" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,654) scale(1,-1)">Despachado</text>
+			<text x="871" y="290" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,580) scale(1,-1)">Revisión ante reversión</text>
+			<rect x="857" y="93" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="857" y="97" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(3%,49%,54%); fill-rule: evenodd;"/>
+			<text x="871" y="157" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,314) scale(1,-1)">Entregado</text>
+			<text x="871" y="120" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,240) scale(1,-1)">Estado de cumplimiento</text>
+		</g>
+	</g>
+</svg>

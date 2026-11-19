@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="1120" height="650" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1120 650" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="1120" height="650"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-650)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="0" width="1120" height="650" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="32" y="608" style="font-family: Helvetica-Bold; font-size: 20px;fill: rgb(3%,49%,54%); stroke:none;" transform="translate(0,1216) scale(1,-1)">10</text>
+			<text x="88" y="608" style="font-family: Helvetica-Bold; font-size: 25px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,1216) scale(1,-1)">Seguridad e IAM</text>
+			<text x="32" y="574" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,1148) scale(1,-1)">Separación de responsabilidades declarada para ECS.</text>
+			<path d="M 32,554 L 1088,554 Z" style="stroke: rgb(80%,86%,90%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="32" y="22" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,44) scale(1,-1)">VORTEXBIRD / ANDESRETAIL</text>
+			<text x="420" y="22" style="font-family: Helvetica; font-size: 10px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,44) scale(1,-1)">Verde: aplicación   Azul: datos   Ámbar: externo   Gris: objetivo cloud</text>
+			<path d="M 422,433 L 422,393 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<path d="M 422,393 L 147,393 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<path d="M 147,393 L 147,353 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="147 353, 150.9147 361.104, 143.0853 361.104" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<path d="M 422,433 L 422,353 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="422 353, 425.9147 361.104, 418.0853 361.104" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<path d="M 422,433 L 422,393 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<path d="M 422,393 L 697,393 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<path d="M 697,393 L 697,353 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="697 353, 700.9147 361.104, 693.0853 361.104" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<path d="M 147,263 L 147,183 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="147 183, 150.9147 191.104, 143.0853 191.104" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<path d="M 422,263 L 422,183 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="422 183, 425.9147 191.104, 418.0853 191.104" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<path d="M 697,263 L 697,183 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="697 183, 700.9147 191.104, 693.0853 191.104" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<path d="M 857,138 L 812,138 Z" style="stroke: rgb(32%,42%,50%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<polygon points="812 138, 820.104 134.0853, 820.104 141.9147" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<rect x="806.045" y="142.0" width="56.90999999999997" height="14.0" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="810.045" y="145.0" style="font-family: Helvetica; font-size: 10px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,290) scale(1,-1)">Controlado</text>
+			<rect x="307" y="433" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="307" y="437" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<text x="321" y="497" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,994) scale(1,-1)">Principal ECS Tasks</text>
+			<text x="321" y="460" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,920) scale(1,-1)">Asume roles temporales</text>
+			<rect x="32" y="263" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="32" y="267" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<text x="46" y="327" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,654) scale(1,-1)">Execution Role</text>
+			<text x="46" y="290" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,580) scale(1,-1)">Imagen, logs y secreto propio</text>
+			<rect x="307" y="263" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="307" y="267" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<text x="321" y="327" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,654) scale(1,-1)">Task Role API</text>
+			<text x="321" y="290" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,580) scale(1,-1)">Sin política SQS</text>
+			<rect x="582" y="263" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="582" y="267" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<text x="596" y="327" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,654) scale(1,-1)">Task Role worker</text>
+			<text x="596" y="290" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,580) scale(1,-1)">Cola específica de eventos</text>
+			<rect x="857" y="263" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="857" y="267" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<text x="871" y="327" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,654) scale(1,-1)">Task Role frontend</text>
+			<text x="871" y="290" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,580) scale(1,-1)">Sin acceso a datos ni SQS</text>
+			<rect x="32" y="93" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="32" y="97" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<text x="46" y="157" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,314) scale(1,-1)">ECR / Secrets / Logs</text>
+			<text x="46" y="120" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,240) scale(1,-1)">Permisos de arranque</text>
+			<rect x="307" y="93" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="307" y="97" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(14%,38%,65%); fill-rule: evenodd;"/>
+			<text x="321" y="157" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,314) scale(1,-1)">Datos privados</text>
+			<text x="321" y="120" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,240) scale(1,-1)">SG, TLS y credenciales acotadas</text>
+			<rect x="582" y="93" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="582" y="97" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,42%,50%); fill-rule: evenodd;"/>
+			<text x="596" y="157" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,314) scale(1,-1)">SQS</text>
+			<text x="596" y="120" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,240) scale(1,-1)">Publicar, leer, visibilidad, acuse</text>
+			<rect x="857" y="93" width="230" height="90" rx="6" ry="6" style="stroke: rgb(78%,85%,90%); stroke-linecap: butt; stroke-width: 1; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<rect x="857" y="97" width="4" height="82" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(67%,39%,0%); fill-rule: evenodd;"/>
+			<text x="871" y="157" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,16%,26%); stroke:none;" transform="translate(0,314) scale(1,-1)">Rol operativo</text>
+			<text x="871" y="120" style="font-family: Helvetica; font-size: 13px;fill: rgb(32%,42%,50%); stroke:none;" transform="translate(0,240) scale(1,-1)">Redrive y recuperación</text>
+		</g>
+	</g>
+</svg>

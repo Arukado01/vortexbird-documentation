@@ -1,12 +1,11 @@
 flowchart TD
-  channels["E-commerce y marketplaces"] --> api["API .NET: contratos, permisos y cuotas"]
-  portal["Portal React"] --> api
-  identity["Keycloak: identidad"] --> portal
-  identity --> api
-  api --> core["Casos de uso y saga"]
-  core --> db["PostgreSQL: estado, outbox y cuotas"]
-  core --> adapters["Puertos y adaptadores simulados"]
-  api --> cache["Redis: consultas"]
-  db --> worker["Worker: reintentos y eventos"]
-  worker --> adapters
-  worker --> payments["Sandbox de pagos opcional: código, sin sesión externa verificada"]
+  browser["Portal y canales"] --> edge["ALB HTTPS"]
+  edge --> web["Frontend ECS"]
+  edge --> api["API .NET en ECS"]
+  id["Keycloak externo OIDC"] --> api
+  id --> web
+  api --> db["PostgreSQL y outbox"]
+  api --> cache["Redis TLS opcional"]
+  db --> worker["Worker ECS"]
+  worker --> sqs["SQS Standard y DLQ"]
+  worker --> adapters["Adaptadores simulados y sandbox opcional"]

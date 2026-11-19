@@ -1,0 +1,9 @@
+flowchart TD
+  pr["Pull request"] --> unit["Build, pruebas y documentación"]
+  pr --> tf["Validación HCL y planes simulados"]
+  unit --> images["Imágenes ECR por digest"]
+  tf --> plan["Plan ECS manual mediante OIDC"]
+  images --> plan
+  plan --> review["Revisión de plan y costo"]
+  review --> approve["Despliegue sujeto a autorización"]
+  approve --> smoke["Health checks y rollback ECS"]
